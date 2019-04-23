@@ -6,6 +6,9 @@ addons:
       - docker-ce
     update: true
 services: docker
+cache: ccache
+git:
+  depth: 1
 #cache:
 #  directories:
 #    - /var/lib/apt/lists
