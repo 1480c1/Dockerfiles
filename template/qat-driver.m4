@@ -13,8 +13,8 @@ RUN kernel_version=$(cat /proc/version | cut -f3 -d' ') && \
     make olddefconfig && \
     sed -i 's/.* CONFIG_CRYPTO_SHA512 .*/CONFIG_CRYPTO_SHA512=y/' .config && \
     sed -i 's/.* CONFIG_UIO .*/CONFIG_UIO=y/' .config && \
-    yes "" | make -j8 && \
-    yes "" | make -j8 modules;
+    yes "" |  && \
+    yes "" |  modules;
 
 # Build the QAT Driver
 ARG QAT_DRIVER_VER=1.7.l.4.3.0-00033
@@ -26,4 +26,4 @@ RUN kernel_version=$(cat /proc/version | cut -f3 -d' ') && \
     wget -O - ${QAT_DRIVER_REPO} | tar xz && \
     KERNEL_SOURCE_ROOT=/home/linux-${kernel_version} ./configure --prefix=/opt/qat && \
     sed -i 's/rdtscll(timestamp)//' quickassist/utilities/osal/src/linux/kernel_space/OsalServices.c && \
-    make -j8;
+    ;
