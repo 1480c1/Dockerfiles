@@ -13,21 +13,41 @@ git:
 #  directories:
 #    - /var/lib/apt/lists
 env:
+  - name=centos-7.4/dldt+ffmpeg
   - name=centos-7.4/dldt+gst
+  - name=centos-7.4/ffmpeg
   - name=centos-7.4/gst
   - name=centos-7.4/nginx+rtmp
+  - name=centos-7.4/ospray
+  - name=centos-7.4/ospray+mpi+OpenImageIO
+  - name=centos-7.5/dldt+ffmpeg
   - name=centos-7.5/dldt+gst
+  - name=centos-7.5/ffmpeg
   - name=centos-7.5/gst
   - name=centos-7.5/nginx+rtmp
+  - name=centos-7.5/ospray
+  - name=centos-7.5/ospray+mpi+OpenImageIO
+  - name=centos-7.6/dldt+ffmpeg
   - name=centos-7.6/dldt+gst
+  - name=centos-7.6/ffmpeg
   - name=centos-7.6/gst
   - name=centos-7.6/nginx+rtmp
+  - name=centos-7.6/ospray
+  - name=centos-7.6/ospray+mpi+OpenImageIO
+  - name=ubuntu-16.04/dldt+ffmpeg
   - name=ubuntu-16.04/dldt+gst
+  - name=ubuntu-16.04/ffmpeg
   - name=ubuntu-16.04/gst
   - name=ubuntu-16.04/nginx+rtmp
+  - name=ubuntu-16.04/ospray
+  - name=ubuntu-16.04/ospray+mpi+OpenImageIO
+  - name=ubuntu-18.04/dldt+ffmpeg
   - name=ubuntu-18.04/dldt+gst
+  - name=ubuntu-18.04/ffmpeg
   - name=ubuntu-18.04/gst
   - name=ubuntu-18.04/nginx+rtmp
+  - name=ubuntu-18.04/ospray
+  - name=ubuntu-18.04/ospray+mpi+OpenImageIO
 
 before_script:
   - docker version
