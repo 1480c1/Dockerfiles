@@ -11,7 +11,7 @@ ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
         cd cmake-${CMAKE_VER} && \
         ./bootstrap --prefix="/usr" && \
-        make -j20 && \
+        make -s -j20 && \
         make install
 
 # Install automake, use version 1.14 on CentOS
@@ -20,7 +20,7 @@ ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.
 RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
         cd automake-${AUTOMAKE_VER} && \
         ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
-        make -j20 && \
+        make -s -j20 && \
         make install
 
 # Build NASM
@@ -31,7 +31,7 @@ RUN  wget ${NASM_REPO} && \
         cd nasm-${NASM_VER} && \
         ./autogen.sh && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-        make -j20 && \
+        make -s -j20 && \
         make install
 
 # Build YASM
@@ -41,7 +41,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
         cd yasm-${YASM_VER} && \
         sed -i "s/) ytasm.*/)/" Makefile.in && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-        make -j20 && \
+        make -s -j20 && \
         make install
 
 # Build ogg
@@ -51,7 +51,7 @@ ARG OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz
 RUN wget -O - ${OGG_REPO} | tar xJ && \
         cd libogg-${OGG_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -62,7 +62,7 @@ ARG VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VE
 RUN wget -O - ${VORBIS_REPO} | tar xJ && \
         cd libvorbis-${VORBIS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -73,7 +73,7 @@ ARG MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}
 RUN wget -O - ${MP3LAME_REPO} | tar xz && \
         cd lame-${MP3LAME_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -85,7 +85,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
         cd fdk-aac && \
         autoreconf -fiv && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -97,7 +97,7 @@ ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
 RUN wget -O - ${OPUS_REPO} | tar xz && \
         cd opus-${OPUS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -109,7 +109,7 @@ RUN git clone ${VPX_REPO} && \
         cd libvpx && \
         git checkout ${VPX_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -123,7 +123,7 @@ RUN  git clone ${AOM_REPO} && \
         cd aom/aom_build && \
         git checkout ${AOM_VER} && \
         cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR="/home/build" && \
         make install
 
@@ -135,7 +135,7 @@ RUN  git clone ${X264_REPO} && \
         cd x264 && \
         git checkout ${X264_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR="/home/build" && \
         make install
 
@@ -149,7 +149,7 @@ RUN  yum install -y -q numactl-devel libpciaccess-devel
 RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
         cd x265/build/linux && \
         cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR="/home/build" && \
         make install
 
@@ -166,7 +166,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
         mkdir -p ../../Bin/Release && \
         ( source /opt/rh/devtoolset-7/enable && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install )
 
@@ -180,7 +180,7 @@ RUN git clone ${SVT_AV1_REPO} && \
         git checkout ${SVT_AV1_VER} && \
         mkdir -p ../../Bin/Release && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -198,7 +198,7 @@ RUN git clone ${SVT_VP9_REPO} && \
         mkdir -p ../../Bin/Release && \
         ( source /opt/rh/devtoolset-7/enable && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install )
 
@@ -212,7 +212,7 @@ RUN yum install -y -q libX11-devel mesa-libGL-devel which libdrm-devel
 RUN wget -O - ${LIBVA_REPO} | tar xz && \
         cd libva-${LIBVA_VER} && \
         ./autogen.sh --prefix=/usr --libdir=/usr/lib64 && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install;
 
@@ -246,7 +246,7 @@ RUN wget -O - ${MEDIA_DRIVER_REPO} | tar xz && mv media-driver-${MEDIA_DRIVER_VE
         mkdir -p media-driver/build && \
         cd media-driver/build && \
         cmake -DBUILD_TYPE=release -DBUILD_ALONG_WITH_CMRTLIB=1 -DMEDIA_VERSION="2.0.0" -DBS_DIR_GMMLIB=/home/gmmlib/Source/GmmLib -DBS_DIR_COMMON=/home/gmmlib/Source/Common -DBS_DIR_INC=/home/gmmlib/Source/inc -DBS_DIR_MEDIA=/home/media-driver -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr .. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -260,7 +260,7 @@ RUN wget -O - ${MSDK_REPO} | tar xz && mv MediaSDK-${MSDK_VER} MediaSDK && \
         mkdir -p MediaSDK/build && \
         cd MediaSDK/build && \
         cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_INCLUDEDIR=include/mfx -DBUILD_SAMPLES=OFF -DENABLE_OPENCL=OFF -Wno-dev .. && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         rm -rf /home/build/usr/samples && \
         rm -rf /home/build/usr/plugins && \
@@ -296,7 +296,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
         mkdir build && \
         cd build && \
         cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=ON -DENABLE_SAMPLE_CORE=OFF  .. && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         rm -rf ../bin/intel64/Release/lib/libgtest* && \
         rm -rf ../bin/intel64/Release/lib/libgmock* && \
         rm -rf ../bin/intel64/Release/lib/libmock* && \
@@ -366,7 +366,7 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-debug \
         --disable-benchmarks \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install;
 
@@ -381,7 +381,7 @@ RUN  wget -O - ${GST_ORC_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -400,7 +400,7 @@ RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -419,7 +419,7 @@ RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -438,7 +438,7 @@ RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -454,7 +454,7 @@ RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -471,7 +471,7 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         --enable-shared \
         --enable-gpl \
         --disable-gtk-doc && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -480,19 +480,19 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
 
 RUN cd SVT-HEVC/gstreamer-plugin && \
         cmake . && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
 RUN cd SVT-VP9/gstreamer-plugin && \
         cmake . && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
 RUN cd SVT-AV1/gstreamer-plugin && \
         cmake . && \
-        make -j20 && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -516,7 +516,7 @@ RUN  wget -O - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples \
         --disable-gtk-doc --disable-debug && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -531,7 +531,7 @@ RUN wget ${OPENCV_REPO} && \
         mkdir build && \
         cd build && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -D BUILD_EXAMPLES=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_TESTS=OFF .. && \
-        make -j20 $(nproc) && \
+        make -s -j20 $(nproc) && \
         make install DESTDIR=/home/build && \
         make install
 

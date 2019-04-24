@@ -6,7 +6,7 @@ addons:
       - docker-ce
     update: true
 services: docker
-cache: ccache
+cache: false
 git:
   depth: 1
 #cache:

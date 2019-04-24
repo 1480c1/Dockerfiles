@@ -24,7 +24,7 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-debug \
         --disable-benchmarks) \
         --disable-gtk-doc && \
-     make -j20 $(nproc) && \
+     make -s -j20 $(nproc) && \
      make install DESTDIR=/home/build && \
      make install;
 define(`INSTALL_PKGS_GST',dnl

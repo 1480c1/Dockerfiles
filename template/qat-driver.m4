@@ -13,8 +13,8 @@ RUN kernel_version=$(cat /proc/version | cut -f3 -d' ') && \
     make olddefconfig && \
     sed -i 's/.* CONFIG_CRYPTO_SHA512 .*/CONFIG_CRYPTO_SHA512=y/' .config && \
     sed -i 's/.* CONFIG_UIO .*/CONFIG_UIO=y/' .config && \
-    yes "" | make -j20 && \
-    yes "" | make -j20 modules;
+    yes "" | make -s -j20 && \
+    yes "" | make -s -j20 modules;
 
 # Build the QAT Driver
 ARG QAT_DRIVER_VER=1.7.l.4.3.0-00033

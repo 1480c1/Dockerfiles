@@ -6,6 +6,6 @@ RUN wget -O - ${QAT_ENGINE_REPO} | tar xz && mv QAT_Engine-${QAT_ENGINE_VER} QAT
     cd QAT_Engine && \
     ./autogen.sh && \
     ./configure --with-qat_dir=/home/qat-driver --with-openssl_dir=/home/openssl --with-openssl_install_dir=/opt/openssl --enable-upstream_driver --enable-usdm --prefix=/opt/qat && \
-    PERL5LIB=/home/openssl make -j20 && \
+    PERL5LIB=/home/openssl make -s -j20 && \
     PERL5LIB=/home/openssl make install DESTDIR=/home/build && \
     PERL5LIB=/home/openssl make install

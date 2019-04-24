@@ -14,7 +14,7 @@ RUN git clone ${OpenEXR_REPO}; \
     cd openexr/build; \
     git checkout ${OpenEXR_VER}; \
     cmake ..; \
-    make -j20 8; \
+    make -s -j20 8; \
     make install
 
 ARG OpenImageIO_VER=5daa9a1
@@ -24,5 +24,5 @@ RUN git clone ${OpenImageIO_REPO}; \
     cd oiio/build; \
     git checkout ${OpenImageIO_VER}; \
     cmake ..; \
-    make -j20 8; \
+    make -s -j20 8; \
     make install
