@@ -87,8 +87,8 @@ RUN git clone https://github.com/google/protobuf.git && \
     ./autogen.sh && \
     ./configure && \
     make && \
-    make install && \
-    make install DESTDIR=/home/build
+    make -s install && \
+    make -s install DESTDIR=/home/build
 #RUN apt-get update && apt-get install -y sudo
 #installing dependency libs to mo_libs directory to avoid issues with updates to Python version
 RUN cd dldt/model-optimizer && \

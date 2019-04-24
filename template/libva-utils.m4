@@ -6,6 +6,5 @@ RUN wget -O - ${LIBVA_UTILS_REPO} | tar xz; \
     cd libva-utils-${LIBVA_UTILS_VER}; \
     ./autogen.sh --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu); \
     make -j8; \
-    make install DESTDIR=/home/build; \
-    make install;
-
+    make -s install DESTDIR=/home/build; \
+    make -s install;

@@ -8,8 +8,8 @@ RUN wget -O - ${PYTHON_REPO} | tar xz && \
     cd Python-${PYTHON_VER} && \
     ./configure --prefix=/usr && \
     make && \
-    make install && \
-    make install DESTDIR=/home/build
+    make -s install && \
+    make -s install DESTDIR=/home/build
 RUN yum install -y -q python-yaml
 ,dnl
 RUN apt-get install -y python3 python3-pip python3-setuptools python-yaml

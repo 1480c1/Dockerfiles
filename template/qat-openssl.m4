@@ -6,9 +6,9 @@ RUN wget -O - ${QAT_OPENSSL_REPO} | tar xz && mv openssl-${QAT_OPENSSL_VER} open
     cd openssl && \
     ./config --prefix=/opt/openssl --openssldir=/opt/openssl -Wl,-rpath,\${LIBRPATH} && \
     make -s -j20 && \
-    make install DESTDIR=/home/build && \
+    make -s install DESTDIR=/home/build && \
 ifelse(index(DOCKER_IMAGE,-dev),-1,,dnl
     rm -rf /home/build/opt/openssl/share/doc && \
     rm -rf /home/build/opt/openssl/share/man && \
 )dnl
-    make install;
+    make -s install;

@@ -6,4 +6,4 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
      sed -i "s/) ytasm.*/)/" Makefile.in && \
      ./configure --prefix="/usr" --libdir=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) && \
      make -s -j20 && \
-     make install
+     make -s install

@@ -16,7 +16,7 @@ ARG PAHO_REPO=https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
 RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
     cd paho.mqtt.c-${PAHO_VER}; \
     make; \
-    make install;
+    make -s install;
 
 #Install va gstreamer plugins
 #Has a dependency on OpenCV, GStreamer

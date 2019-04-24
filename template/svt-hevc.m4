@@ -16,8 +16,8 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,`dnl
 ')dnl
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j20 && \
-    make install DESTDIR=/home/build && \
-    make install ifelse(index(DOCKER_IMAGE,centos),-1,,`)')
+    make -s install DESTDIR=/home/build && \
+    make -s install ifelse(index(DOCKER_IMAGE,centos),-1,,`)')
 
 define(`FFMPEG_SOURCE_SVT_HEVC',dnl
 # Patch FFmpeg source for SVT-HEVC

@@ -9,5 +9,5 @@ RUN wget -O - ${QATZIP_REPO} | tar xz && mv QATzip-${QATZIP_VER} QATzip && \
     mkdir -p /opt/qat/lib && \
     mkdir -p /opt/qat/bin && \
     mkdir -p /opt/qat/include && \
-    make install && \
+    make -s install && \
     cp /usr/include/qatzip.h /opt/qat/include;

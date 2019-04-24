@@ -25,8 +25,8 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-benchmarks) \
         --disable-gtk-doc && \
      make -s -j20 && \
-     make install DESTDIR=/home/build && \
-     make install;
+     make -s install DESTDIR=/home/build && \
+     make -s install;
 define(`INSTALL_PKGS_GST',dnl
 ifelse(index(DOCKER_IMAGE,ubuntu),-1,,libglib2.0 libpango-1.0-0 libpangocairo-1.0-0 gobject-introspection )dnl
 ifelse(index(DOCKER_IMAGE,centos),-1,,glib2-2.56.1 pango gobject-introspection ))dnl

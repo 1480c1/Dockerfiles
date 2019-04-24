@@ -15,7 +15,7 @@ RUN git clone ${OpenEXR_REPO}; \
     git checkout ${OpenEXR_VER}; \
     cmake ..; \
     make -s -j20; \
-    make install
+    make -s install
 
 ARG OpenImageIO_VER=5daa9a1
 ARG OpenImageIO_REPO=https://github.com/OpenImageIO/oiio.git
@@ -25,4 +25,4 @@ RUN git clone ${OpenImageIO_REPO}; \
     git checkout ${OpenImageIO_VER}; \
     cmake ..; \
     make -s -j20; \
-    make install
+    make -s install

@@ -15,7 +15,7 @@ RUN wget -O - ${LIBVA_REPO} | tar xz && \
     cd libva-${LIBVA_VER} && \
     ./autogen.sh --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) && \
     make -s -j20 && \
-    make install DESTDIR=/home/build && \
-    make install;
+    make -s install DESTDIR=/home/build && \
+    make -s install;
 
 define(`INSTALL_PKGS_LIBVA',ifelse(index(DOCKER_IMAGE,ubuntu),-1, mesa-dri-drivers mesa-libGL libdrm , libdrm2) )dnl

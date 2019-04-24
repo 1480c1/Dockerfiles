@@ -7,6 +7,6 @@ RUN wget -O - ${LIBRDKAFKA_REPO} | tar xz && \
     cd librdkafka-${LIBRDKAFKA_VER} && \
     ./configure --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) && \
     make -s -j20 && \
-    make install DESTDIR=/home/build && \
-    make install;
+    make -s install DESTDIR=/home/build && \
+    make -s install;
 define(`FFMPEG_CONFIG_LIBRDKAFKA',--enable-librdkafka )dnl

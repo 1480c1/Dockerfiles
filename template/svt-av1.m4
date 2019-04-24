@@ -8,8 +8,8 @@ RUN git clone ${SVT_AV1_REPO} && \
     mkdir -p ../../Bin/Release && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j20 && \
-    make install DESTDIR=/home/build && \
-    make install
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 #Remove build residue from SVT-AV1 build -- temp fix for bug
 RUN if [ -d "build/home/" ]; then rm -rf build/home/; fi

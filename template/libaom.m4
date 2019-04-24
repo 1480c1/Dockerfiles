@@ -9,5 +9,5 @@ RUN  git clone ${AOM_REPO} && \
      git checkout ${AOM_VER} && \
      cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) .. && \
      make -s -j20 && \
-     make install DESTDIR="/home/build" && \
-     make install
+     make -s install DESTDIR="/home/build" && \
+     make -s install

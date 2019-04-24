@@ -10,5 +10,5 @@ RUN  wget -O - ${GST_ORC_REPO} | tar xJ && \
                 --disable-examples ifelse(index(DOCKER_IMAGE,-dev),-1,--disable-debug) \
                 --disable-gtk-doc && \
      make -s -j20 && \
-     make install DESTDIR=/home/build && \
-     make install
+     make -s install DESTDIR=/home/build && \
+     make -s install

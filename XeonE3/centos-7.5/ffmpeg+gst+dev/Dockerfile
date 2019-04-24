@@ -12,7 +12,7 @@ RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz 
         cd cmake-${CMAKE_VER} && \
         ./bootstrap --prefix="/usr" && \
         make -s -j20 && \
-        make install
+        make -s install
 
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
@@ -21,7 +21,7 @@ RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
         cd automake-${AUTOMAKE_VER} && \
         ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
         make -s -j20 && \
-        make install
+        make -s install
 
 # Build NASM
 ARG NASM_VER=2.13.03
@@ -32,7 +32,7 @@ RUN  wget ${NASM_REPO} && \
         ./autogen.sh && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 && \
         make -s -j20 && \
-        make install
+        make -s install
 
 # Build YASM
 ARG YASM_VER=1.3.0
@@ -42,7 +42,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
         sed -i "s/) ytasm.*/)/" Makefile.in && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 && \
         make -s -j20 && \
-        make install
+        make -s install
 
 # Build ogg
 ARG OGG_VER=1.3.3
@@ -52,8 +52,8 @@ RUN wget -O - ${OGG_REPO} | tar xJ && \
         cd libogg-${OGG_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build vorbis
 ARG VORBIS_VER=1.3.6
@@ -63,8 +63,8 @@ RUN wget -O - ${VORBIS_REPO} | tar xJ && \
         cd libvorbis-${VORBIS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build mp3lame
 ARG MP3LAME_VER=3.100
@@ -74,8 +74,8 @@ RUN wget -O - ${MP3LAME_REPO} | tar xz && \
         cd lame-${MP3LAME_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build fdk-aac
 ARG FDK_AAC_VER=v0.1.6
@@ -86,8 +86,8 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
         autoreconf -fiv && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 # Build opus
@@ -98,8 +98,8 @@ RUN wget -O - ${OPUS_REPO} | tar xz && \
         cd opus-${OPUS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build vpx
 ARG VPX_VER=tags/v1.7.0
@@ -110,8 +110,8 @@ RUN git clone ${VPX_REPO} && \
         git checkout ${VPX_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 # Build AOM
@@ -124,8 +124,8 @@ RUN  git clone ${AOM_REPO} && \
         git checkout ${AOM_VER} && \
         cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
         make -s -j20 && \
-        make install DESTDIR="/home/build" && \
-        make install
+        make -s install DESTDIR="/home/build" && \
+        make -s install
 
 # Build x264
 ARG X264_VER=stable
@@ -136,8 +136,8 @@ RUN  git clone ${X264_REPO} && \
         git checkout ${X264_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
         make -s -j20 && \
-        make install DESTDIR="/home/build" && \
-        make install
+        make -s install DESTDIR="/home/build" && \
+        make -s install
 
 
 # Build x265
@@ -150,8 +150,8 @@ RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
         cd x265/build/linux && \
         cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
         make -s -j20 && \
-        make install DESTDIR="/home/build" && \
-        make install
+        make -s install DESTDIR="/home/build" && \
+        make -s install
 
 # Fetch SVT-HEVC
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
@@ -167,8 +167,8 @@ RUN git clone ${SVT_HEVC_REPO} && \
         ( source /opt/rh/devtoolset-7/enable && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install )
+        make -s install DESTDIR=/home/build && \
+        make -s install )
 
 
 # Fetch SVT-AV1
@@ -181,8 +181,8 @@ RUN git clone ${SVT_AV1_REPO} && \
         mkdir -p ../../Bin/Release && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 #Remove build residue from SVT-AV1 build -- temp fix for bug
 RUN if [ -d "build/home/" ]; then rm -rf build/home/; fi
@@ -199,8 +199,8 @@ RUN git clone ${SVT_VP9_REPO} && \
         ( source /opt/rh/devtoolset-7/enable && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install )
+        make -s install DESTDIR=/home/build && \
+        make -s install )
 
 #include(transform360.m4)
 # Fetch gmmlib
@@ -221,8 +221,8 @@ RUN wget -O - ${LIBVA_REPO} | tar xz && \
         cd libva-${LIBVA_VER} && \
         ./autogen.sh --prefix=/usr --libdir=/usr/lib64 && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install;
+        make -s install DESTDIR=/home/build && \
+        make -s install;
 
 
 # Build libva-utils
@@ -233,8 +233,8 @@ RUN wget -O - ${LIBVA_UTILS_REPO} | tar xz; \
         cd libva-utils-${LIBVA_UTILS_VER}; \
         ./autogen.sh --prefix=/usr --libdir=/usr/lib64; \
         make -j8; \
-        make install DESTDIR=/home/build; \
-        make install;
+        make -s install DESTDIR=/home/build; \
+        make -s install;
 
 
 # Build media driver
@@ -248,8 +248,8 @@ RUN wget -O - ${MEDIA_DRIVER_REPO} | tar xz && mv media-driver-${MEDIA_DRIVER_VE
         cd media-driver/build && \
         cmake -DBUILD_TYPE=release -DBUILD_ALONG_WITH_CMRTLIB=1 -DMEDIA_VERSION="2.0.0" -DBS_DIR_GMMLIB=/home/gmmlib/Source/GmmLib -DBS_DIR_COMMON=/home/gmmlib/Source/Common -DBS_DIR_INC=/home/gmmlib/Source/inc -DBS_DIR_MEDIA=/home/media-driver -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr .. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 
@@ -262,8 +262,8 @@ RUN wget -O - ${MSDK_REPO} | tar xz && mv MediaSDK-${MSDK_VER} MediaSDK && \
         cd MediaSDK/build && \
         cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_INCLUDEDIR=include/mfx -DBUILD_SAMPLES=OFF -DENABLE_OPENCL=OFF -Wno-dev .. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install;
+        make -s install DESTDIR=/home/build && \
+        make -s install;
 
 #install OpenCL
 
@@ -288,8 +288,8 @@ RUN wget -O - ${PYTHON_REPO} | tar xz && \
         cd Python-${PYTHON_VER} && \
         ./configure --prefix=/usr && \
         make && \
-        make install && \
-        make install DESTDIR=/home/build
+        make -s install && \
+        make -s install DESTDIR=/home/build
 RUN yum install -y -q python-yaml
 
 
@@ -369,8 +369,8 @@ RUN git clone https://github.com/google/protobuf.git && \
         ./autogen.sh && \
         ./configure && \
         make && \
-        make install && \
-        make install DESTDIR=/home/build
+        make -s install && \
+        make -s install DESTDIR=/home/build
 #RUN apt-get update && apt-get install -y sudo
 #installing dependency libs to mo_libs directory to avoid issues with updates to Python version
 RUN cd dldt/model-optimizer && \
@@ -403,8 +403,8 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install;
+        make -s install DESTDIR=/home/build && \
+        make -s install;
 
 # Build the gstremaer plugin bad set
 ARG GST_ORC_VER=0.4.28
@@ -418,8 +418,8 @@ RUN  wget -O - ${GST_ORC_REPO} | tar xJ && \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build the gstremaer plugin base
 ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${GST_VER}.tar.xz
@@ -437,8 +437,8 @@ RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 # Build the gstremaer plugin good set
@@ -456,8 +456,8 @@ RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 # Build the gstremaer plugin bad set
@@ -475,8 +475,8 @@ RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build the gstremaer plugin ugly set
 ARG GST_PLUGIN_UGLY_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${GST_VER}.tar.xz
@@ -491,8 +491,8 @@ RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
         --disable-examples  \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build gst-libav
 ARG GST_PLUGIN_LIBAV_REPO=https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${GST_VER}.tar.xz
@@ -508,8 +508,8 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         --enable-gpl \
         --disable-gtk-doc && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 # Build gstremaer plugin for svt
@@ -517,20 +517,20 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
 RUN cd SVT-HEVC/gstreamer-plugin && \
         cmake . && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 RUN cd SVT-VP9/gstreamer-plugin && \
         cmake . && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 RUN cd SVT-AV1/gstreamer-plugin && \
         cmake . && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 # Build gstremaer plugin vaapi
 ARG GST_PLUGIN_VAAPI_REPO=https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${GST_VER}.tar.xz
@@ -553,8 +553,8 @@ RUN  wget -O - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
         --disable-examples \
         --disable-gtk-doc  && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 ARG OPENCV_VER=4.0.0
@@ -568,8 +568,8 @@ RUN wget ${OPENCV_REPO} && \
         cd build && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -D BUILD_EXAMPLES=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_TESTS=OFF .. && \
         make -s -j20 && \
-        make install DESTDIR=/home/build && \
-        make install
+        make -s install DESTDIR=/home/build && \
+        make -s install
 
 
 RUN yum install -y -q glib2-devel gtk-dock openblas
@@ -581,7 +581,7 @@ ARG PAHO_REPO=https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
 RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
         cd paho.mqtt.c-${PAHO_VER}; \
         make; \
-        make install;
+        make -s install;
 
 #Install va gstreamer plugins
 #Has a dependency on OpenCV, GStreamer
@@ -655,7 +655,7 @@ RUN cd /home/FFmpeg; \
 RUN cd /home/FFmpeg && \
         ./configure --prefix="/usr" --libdir=/usr/lib64 --extra-libs="-lpthread -lm" --enable-shared --enable-gpl --enable-libass --enable-libfreetype  --enable-openssl --enable-nonfree --enable-libdrm --enable-libmfx  --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-libaom --enable-libsvthevc --enable-libsvtav1 --enable-libinference_engine  && \
         make -s -j20 && \
-        make install DESTDIR="/home/build"
+        make -s install DESTDIR="/home/build"
 
 
 

@@ -20,7 +20,7 @@ Kernel version 4.18 or later is recommended for feature and performance. The fol
 (4) make olddefconfig
 (5) make -j
 (6) sudo make modules_install
-(7) sudo make install
+(7) sudo make -s install
 (8) sudo update-grub
 (9) sudo shutdown -r now
 
