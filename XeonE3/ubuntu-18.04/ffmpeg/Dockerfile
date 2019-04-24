@@ -17,28 +17,28 @@ RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-RUN apt-get install -y -q automake
+    RUN apt-get install -y -q automake
 
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 RUN  wget -q  ${NASM_REPO} && \
-    tar -xaf nasm* && \
-    cd nasm-${NASM_VER} && \
-    ./autogen.sh && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j10 && \
-    make -s install
+     tar -xaf nasm* && \
+     cd nasm-${NASM_VER} && \
+     ./autogen.sh && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+     make -s -j10 && \
+     make -s install
 
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
-    cd yasm-${YASM_VER} && \
-    sed -i "s/) ytasm.*/)/" Makefile.in && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j10 && \
-    make -s install
+     cd yasm-${YASM_VER} && \
+     sed -i "s/) ytasm.*/)/" Makefile.in && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+     make -s -j10 && \
+     make -s install
 
 # Build ogg
 ARG OGG_VER=1.3.3
@@ -85,7 +85,6 @@ RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aa
     make -s install DESTDIR=/home/build && \
     make -s install
 
-
 # Build opus
 ARG OPUS_VER=1.2.1
 ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
@@ -109,32 +108,30 @@ RUN git clone ${VPX_REPO} && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
-
 # Build AOM
 ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
 ARG AOM_REPO=https://aomedia.googlesource.com/aom
 
 RUN  git clone ${AOM_REPO} && \
-    mkdir aom/aom_build && \
-    cd aom/aom_build && \
-    git checkout ${AOM_VER} && \
-    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
+     mkdir aom/aom_build && \
+     cd aom/aom_build && \
+     git checkout ${AOM_VER} && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x264
 ARG X264_VER=stable
 ARG X264_REPO=https://github.com/mirror/x264
 
 RUN  git clone ${X264_REPO} && \
-    cd x264 && \
-    git checkout ${X264_VER} && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
-
+     cd x264 && \
+     git checkout ${X264_VER} && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x265
 ARG X265_VER=2.9
@@ -143,11 +140,11 @@ ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libnuma-dev
 
 RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-    cd x265/build/linux && \
-    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
+     cd x265/build/linux && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Fetch SVT-HEVC
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
@@ -160,7 +157,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install
+    make -s install 
 
 
 # Fetch SVT-AV1
@@ -191,7 +188,7 @@ RUN git clone ${SVT_VP9_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install
+    make -s install 
 
 #include(transform360.m4)
 # Fetch gmmlib
@@ -199,7 +196,6 @@ ARG GMMLIB_VER=intel-gmmlib-18.3.0
 ARG GMMLIB_REPO=https://github.com/intel/gmmlib/archive/${GMMLIB_VER}.tar.gz
 
 RUN wget -q  -O - ${GMMLIB_REPO} | tar xz && mv gmmlib-${GMMLIB_VER} gmmlib;
-
 
 # Build libva
 ARG LIBVA_VER=2.4.0
@@ -317,3 +313,4 @@ RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime; \
 COPY --from=build /home/build /
 ENV LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
 ENV LIBVA_DRIVER_NAME=iHD
+

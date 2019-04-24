@@ -11,8 +11,7 @@ ifelse(index(DOCKER_IMAGE,centos74),-1,,
 )dnl
 
 
-ARG PAHO_VER=1.3.0
-ARG PAHO_REPO=https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
+
 RUN wget -q  -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
     cd paho.mqtt.c-${PAHO_VER}; \
     make; \

@@ -27,22 +27,22 @@ RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 RUN  wget -q  ${NASM_REPO} && \
-    tar -xaf nasm* && \
-    cd nasm-${NASM_VER} && \
-    ./autogen.sh && \
-    ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -s -j10 && \
-    make -s install
+     tar -xaf nasm* && \
+     cd nasm-${NASM_VER} && \
+     ./autogen.sh && \
+     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+     make -s -j10 && \
+     make -s install
 
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
-    cd yasm-${YASM_VER} && \
-    sed -i "s/) ytasm.*/)/" Makefile.in && \
-    ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -s -j10 && \
-    make -s install
+     cd yasm-${YASM_VER} && \
+     sed -i "s/) ytasm.*/)/" Makefile.in && \
+     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+     make -s -j10 && \
+     make -s install
 
 #build ISPC
 

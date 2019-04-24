@@ -17,28 +17,28 @@ RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-RUN apt-get install -y -q automake
+    RUN apt-get install -y -q automake
 
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 RUN  wget -q  ${NASM_REPO} && \
-    tar -xaf nasm* && \
-    cd nasm-${NASM_VER} && \
-    ./autogen.sh && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j10 && \
-    make -s install
+     tar -xaf nasm* && \
+     cd nasm-${NASM_VER} && \
+     ./autogen.sh && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+     make -s -j10 && \
+     make -s install
 
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
-    cd yasm-${YASM_VER} && \
-    sed -i "s/) ytasm.*/)/" Makefile.in && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j10 && \
-    make -s install
+     cd yasm-${YASM_VER} && \
+     sed -i "s/) ytasm.*/)/" Makefile.in && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+     make -s -j10 && \
+     make -s install
 
 # Build ogg
 ARG OGG_VER=1.3.3
@@ -85,7 +85,6 @@ RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aa
     make -s install DESTDIR=/home/build && \
     make -s install
 
-
 # Build opus
 ARG OPUS_VER=1.2.1
 ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
@@ -109,32 +108,30 @@ RUN git clone ${VPX_REPO} && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
-
 # Build AOM
 ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
 ARG AOM_REPO=https://aomedia.googlesource.com/aom
 
 RUN  git clone ${AOM_REPO} && \
-    mkdir aom/aom_build && \
-    cd aom/aom_build && \
-    git checkout ${AOM_VER} && \
-    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
+     mkdir aom/aom_build && \
+     cd aom/aom_build && \
+     git checkout ${AOM_VER} && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x264
 ARG X264_VER=stable
 ARG X264_REPO=https://github.com/mirror/x264
 
 RUN  git clone ${X264_REPO} && \
-    cd x264 && \
-    git checkout ${X264_VER} && \
-    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
-
+     cd x264 && \
+     git checkout ${X264_VER} && \
+     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x265
 ARG X265_VER=2.9
@@ -143,11 +140,11 @@ ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libnuma-dev
 
 RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-    cd x265/build/linux && \
-    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
-    make -s -j10 && \
-    make -s install DESTDIR="/home/build" && \
-    make -s install
+     cd x265/build/linux && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Fetch SVT-HEVC
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
@@ -160,7 +157,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install
+    make -s install 
 
 
 # Fetch SVT-AV1
@@ -191,7 +188,7 @@ RUN git clone ${SVT_VP9_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install
+    make -s install 
 
 #include(transform360.m4)
 # Build DLDT-Inference Engine
@@ -216,7 +213,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
     rm -rf ../bin/intel64/Release/lib/libtest*
 
 ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
-#RUN find dldt/inference-engine/cmake/share/ -type f | xargs sed -i 's/16.04/18.04/g'
+    #RUN find dldt/inference-engine/cmake/share/ -type f | xargs sed -i 's/16.04/18.04/g'
 
 RUN mkdir -p /opt/intel/dldt/inference-engine/include && \
     cp -r dldt/inference-engine/include/* /opt/intel/dldt/inference-engine/include && \
@@ -241,19 +238,19 @@ RUN mkdir -p build/opt/intel/dldt/inference-engine/include && \
     cp -r dldt/inference-engine/temp/omp/lib/* build/opt/intel/dldt/inference-engine/external/omp/lib/
 
 RUN for p in /usr /home/build/usr /opt/intel/dldt/inference-engine /home/build/opt/intel/dldt/inference-engine; do \
-    pkgconfiglibdir="$p/lib/x86_64-linux-gnu" && \
-    mkdir -p "${pkgconfiglibdir}/pkgconfig" && \
-    pc="${pkgconfiglibdir}/pkgconfig/dldt.pc" && \
-    echo "prefix=/opt" > "$pc" && \
-    echo "libdir=${libdir}" >> "$pc" && \
-    echo "includedir=/opt/intel/dldt/inference-engine/include" >> "$pc" && \
-    echo "" >> "$pc" && \
-    echo "Name: DLDT" >> "$pc" && \
-    echo "Description: Intel Deep Learning Deployment Toolkit" >> "$pc" && \
-    echo "Version: 5.0" >> "$pc" && \
-    echo "" >> "$pc" && \
-    echo "Libs: -L\${libdir} -linference_engine -linference_engine_c_wrapper" >> "$pc" && \
-    echo "Cflags: -I\${includedir}" >> "$pc"; \
+        pkgconfiglibdir="$p/lib/x86_64-linux-gnu" && \
+        mkdir -p "${pkgconfiglibdir}/pkgconfig" && \
+        pc="${pkgconfiglibdir}/pkgconfig/dldt.pc" && \
+        echo "prefix=/opt" > "$pc" && \
+        echo "libdir=${libdir}" >> "$pc" && \
+        echo "includedir=/opt/intel/dldt/inference-engine/include" >> "$pc" && \
+        echo "" >> "$pc" && \
+        echo "Name: DLDT" >> "$pc" && \
+        echo "Description: Intel Deep Learning Deployment Toolkit" >> "$pc" && \
+        echo "Version: 5.0" >> "$pc" && \
+        echo "" >> "$pc" && \
+        echo "Libs: -L\${libdir} -linference_engine -linference_engine_c_wrapper" >> "$pc" && \
+        echo "Cflags: -I\${includedir}" >> "$pc"; \
     done;
 
 ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
@@ -347,3 +344,4 @@ COPY --from=build /home/build /
 ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/intel/dldt/inference-engine/external/omp/lib:${libdir}
 ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
+

@@ -1,6 +1,4 @@
 # Build the gstremaer plugin good set
-ARG GST_PLUGIN_GOOD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${GST_VER}.tar.xz
-
 ifelse(index(DOCKER_IMAGE,ubuntu),-1,,
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libsoup2.4-dev libjpeg-dev
 )dnl
@@ -8,8 +6,7 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,
 RUN  yum install -y -q libsoup-devel libjpeg-devel
 )dnl
 
-RUN  wget -q  -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
-     cd gst-plugins-good-${GST_VER} && \
+RUN  cd gst-plugins-good-${GST_VER} && \
      ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) \

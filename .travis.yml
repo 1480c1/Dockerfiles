@@ -3,138 +3,130 @@ dist: xenial
 addons:
   apt:
     packages:
-      - docker-ce
+    - docker-ce
     update: true
 services: docker
 cache: false
 git:
   depth: 1
-#cache:
-#  directories:
-#    - /var/lib/apt/lists
+stages:
+- base
+- test
+- deploy
 env:
-  - name=centos-7.4/dldt+ffmpeg
-  - name=centos-7.4/dldt+gst
-  - name=centos-7.4/ffmpeg
-  - name=centos-7.4/gst
-  - name=centos-7.4/nginx+rtmp
-  - name=centos-7.4/ospray
-  - name=centos-7.4/ospray+mpi+OpenImageIO
-  - name=centos-7.5/dldt+ffmpeg
-  - name=centos-7.5/dldt+gst
-  - name=centos-7.5/ffmpeg
-  - name=centos-7.5/gst
-  - name=centos-7.5/nginx+rtmp
-  - name=centos-7.5/ospray
-  - name=centos-7.5/ospray+mpi+OpenImageIO
-  - name=centos-7.6/dldt+ffmpeg
-  - name=centos-7.6/dldt+gst
-  - name=centos-7.6/ffmpeg
-  - name=centos-7.6/gst
-  - name=centos-7.6/nginx+rtmp
-  - name=centos-7.6/ospray
-  - name=centos-7.6/ospray+mpi+OpenImageIO
-  - name=ubuntu-16.04/dldt+ffmpeg
-  - name=ubuntu-16.04/dldt+gst
-  - name=ubuntu-16.04/ffmpeg
-  - name=ubuntu-16.04/gst
-  - name=ubuntu-16.04/nginx+rtmp
-  - name=ubuntu-16.04/ospray
-  - name=ubuntu-16.04/ospray+mpi+OpenImageIO
-  - name=ubuntu-18.04/dldt+ffmpeg
-  - name=ubuntu-18.04/dldt+gst
-  - name=ubuntu-18.04/ffmpeg
-  - name=ubuntu-18.04/gst
-  - name=ubuntu-18.04/nginx+rtmp
-  - name=ubuntu-18.04/ospray
-  - name=ubuntu-18.04/ospray+mpi+OpenImageIO
-
+- name=centos-7.4/dldt+ffmpeg
+- name=centos-7.4/dldt+gst
+- name=centos-7.4/ffmpeg
+- name=centos-7.4/gst
+- name=centos-7.4/nginx+rtmp
+- name=centos-7.4/ospray
+- name=centos-7.4/ospray+mpi+OpenImageIO
+- name=centos-7.5/dldt+ffmpeg
+- name=centos-7.5/dldt+gst
+- name=centos-7.5/ffmpeg
+- name=centos-7.5/gst
+- name=centos-7.5/nginx+rtmp
+- name=centos-7.5/ospray
+- name=centos-7.5/ospray+mpi+OpenImageIO
+- name=centos-7.6/dldt+ffmpeg
+- name=centos-7.6/dldt+gst
+- name=centos-7.6/ffmpeg
+- name=centos-7.6/gst
+- name=centos-7.6/nginx+rtmp
+- name=centos-7.6/ospray
+- name=centos-7.6/ospray+mpi+OpenImageIO
+- name=ubuntu-16.04/dldt+ffmpeg
+- name=ubuntu-16.04/dldt+gst
+- name=ubuntu-16.04/ffmpeg
+- name=ubuntu-16.04/gst
+- name=ubuntu-16.04/nginx+rtmp
+- name=ubuntu-16.04/ospray
+- name=ubuntu-16.04/ospray+mpi+OpenImageIO
+- name=ubuntu-18.04/dldt+ffmpeg
+- name=ubuntu-18.04/dldt+gst
+- name=ubuntu-18.04/ffmpeg
+- name=ubuntu-18.04/gst
+- name=ubuntu-18.04/nginx+rtmp
+- name=ubuntu-18.04/ospray
+- name=ubuntu-18.04/ospray+mpi+OpenImageIO
 install:
-  - sudo dd if=/dev/zero of=/swapfile1 bs=1024 count=1048576
-  - sudo chown root:root /swapfile1
-  - sudo chmod 0600 /swapfile1
-  - sudo mkswap /swapfile1
-  - sudo swapon /swapfile1
-  - free -m
-  - df -h
+- sudo dd if=/dev/zero of=/swapfile1 bs=1024 count=1048576
+- sudo chown root:root /swapfile1
+- sudo chmod 0600 /swapfile1
+- sudo mkswap /swapfile1
+- sudo swapon /swapfile1
+- free -m
+- df -h
 before_script:
-  - docker version
+- docker version
 script:
-  - mkdir build && cd build
-  - cmake ..
-  - cd Xeon/${name} && make -j100
-  - ctest
+- &base_script mkdir build && cd build && cmake ..
+- cd Xeon/${name} && make -j10
+- ctest
 matrix:
   fast_finish: true
   allow_failures: # All images with GST will have GST SVT VP9 test failing. NGINX RTMP tests are not stable
-    - name: centos-7.4/ffmpeg+gst+dev
-    - env: name=centos-7.4/dldt+gst
-    - env: name=centos-7.4/gst
-    - env: name=centos-7.4/nginx+rtmp
-    - name: centos-7.5/ffmpeg+gst+dev
-    - env: name=centos-7.5/dldt+gst
-    - env: name=centos-7.5/gst
-    - env: name=centos-7.5/nginx+rtmp
-    - name: centos-7.6/ffmpeg+gst+dev
-    - env: name=centos-7.6/dldt+gst
-    - env: name=centos-7.6/gst
-    - env: name=centos-7.6/nginx+rtmp
-    - name: ubuntu-16.04/ffmpeg+gst+dev
-    - env: name=ubuntu-16.04/dldt+gst
-    - env: name=ubuntu-16.04/gst
-    - env: name=ubuntu-16.04/nginx+rtmp
-    - name: ubuntu-18.04/ffmpeg+gst+dev
-    - env: name=ubuntu-18.04/dldt+gst
-    - env: name=ubuntu-18.04/gst
-    - env: name=ubuntu-18.04/nginx+rtmp
+  - name: centos-7.4/ffmpeg+gst+dev
+  - env: name=centos-7.4/dldt+gst
+  - env: name=centos-7.4/gst
+  - env: name=centos-7.4/nginx+rtmp
+  - name: centos-7.5/ffmpeg+gst+dev
+  - env: name=centos-7.5/dldt+gst
+  - env: name=centos-7.5/gst
+  - env: name=centos-7.5/nginx+rtmp
+  - name: centos-7.6/ffmpeg+gst+dev
+  - env: name=centos-7.6/dldt+gst
+  - env: name=centos-7.6/gst
+  - env: name=centos-7.6/nginx+rtmp
+  - name: ubuntu-16.04/ffmpeg+gst+dev
+  - env: name=ubuntu-16.04/dldt+gst
+  - env: name=ubuntu-16.04/gst
+  - env: name=ubuntu-16.04/nginx+rtmp
+  - name: ubuntu-18.04/ffmpeg+gst+dev
+  - env: name=ubuntu-18.04/dldt+gst
+  - env: name=ubuntu-18.04/gst
+  - env: name=ubuntu-18.04/nginx+rtmp
   include:
-    - name: centos-7.4/ffmpeg+gst+dev
-      script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.4/ffmpeg+gst+dev
-        - cd Xeon/centos-7.4/ffmpeg+gst+dev
-        - ctest
-      after_failure:
-        - tail --lines=5000 log_Xeon_centos74_ffmpeg_gst_dev.log
-    - name: centos-7.5/ffmpeg+gst+dev
-      script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.5/ffmpeg+gst+dev
-        - cd Xeon/centos-7.5/ffmpeg+gst+dev
-        - ctest
-      after_failure:
-        - tail --lines=5000 log_Xeon_centos75_ffmpeg_gst_dev.log
-    - name: centos-7.6/ffmpeg+gst+dev
-      script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.6/ffmpeg+gst+dev
-        - cd Xeon/centos-7.6/ffmpeg+gst+dev
-        - ctest
-      after_failure:
-        - tail --lines=5000 log_Xeon_centos76_ffmpeg_gst_dev.log
-    - name: ubuntu-16.04/ffmpeg+gst+dev
-      script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - travis_wait 150 ../script/travis_build.sh Xeon/ubuntu-16.04/ffmpeg+gst+dev
-        - cd Xeon/ubuntu-16.04/ffmpeg+gst+dev
-        - ctest
-      after_failure:
-        - tail --lines=5000 log_Xeon_ubuntu1604_ffmpeg_gst_dev.log
-    - name: ubuntu-18.04/ffmpeg+gst+dev
-      script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - travis_wait 150 ../script/travis_build.sh Xeon/ubuntu-18.04/ffmpeg+gst+dev
-        - cd Xeon/ubuntu-18.04/ffmpeg+gst+dev
-        - ctest
-      after_failure:
-        - tail --lines=5000 log_Xeon_ubuntu1804_ffmpeg_gst_dev.log
+  - name: centos-7.4/base
+    script:
+
+  - name: centos-7.4/ffmpeg+gst+dev
+    script:
+    - *base_script
+    - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.4/ffmpeg+gst+dev
+    - cd Xeon/centos-7.4/ffmpeg+gst+dev
+    - ctest
+    after_failure:
+    - tail --lines=5000 log_Xeon_centos74_ffmpeg_gst_dev.log
+  - name: centos-7.5/ffmpeg+gst+dev
+    script:
+    - *base_script
+    - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.5/ffmpeg+gst+dev
+    - cd Xeon/centos-7.5/ffmpeg+gst+dev
+    - ctest
+    after_failure:
+    - tail --lines=5000 log_Xeon_centos75_ffmpeg_gst_dev.log
+  - name: centos-7.6/ffmpeg+gst+dev
+    script:
+    - *base_script
+    - travis_wait 150 ../script/travis_build.sh Xeon/centos-7.6/ffmpeg+gst+dev
+    - cd Xeon/centos-7.6/ffmpeg+gst+dev
+    - ctest
+    after_failure:
+    - tail --lines=5000 log_Xeon_centos76_ffmpeg_gst_dev.log
+  - name: ubuntu-16.04/ffmpeg+gst+dev
+    script:
+    - *base_script
+    - travis_wait 150 ../script/travis_build.sh Xeon/ubuntu-16.04/ffmpeg+gst+dev
+    - cd Xeon/ubuntu-16.04/ffmpeg+gst+dev
+    - ctest
+    after_failure:
+    - tail --lines=5000 log_Xeon_ubuntu1604_ffmpeg_gst_dev.log
+  - name: ubuntu-18.04/ffmpeg+gst+dev
+    script:
+    - *base_script
+    - travis_wait 150 ../script/travis_build.sh Xeon/ubuntu-18.04/ffmpeg+gst+dev
+    - cd Xeon/ubuntu-18.04/ffmpeg+gst+dev
+    - ctest
+    after_failure:
+    - tail --lines=5000 log_Xeon_ubuntu1804_ffmpeg_gst_dev.log

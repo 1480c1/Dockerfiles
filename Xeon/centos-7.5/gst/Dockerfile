@@ -9,136 +9,133 @@ RUN yum install -y -q bzip2 make autoconf libtool git wget -q  ca-certificates p
 ARG CMAKE_VER=3.13.1
 ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
-        cd cmake-${CMAKE_VER} && \
-        ./bootstrap --prefix="/usr" && \
-        make -s -j10 && \
-        make -s install
+    cd cmake-${CMAKE_VER} && \
+    ./bootstrap --prefix="/usr" && \
+    make -s -j10 && \
+    make -s install
 
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
 RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
-        cd automake-${AUTOMAKE_VER} && \
-        ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
-        make -s -j10 && \
-        make -s install
+    cd automake-${AUTOMAKE_VER} && \
+    ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
+    make -s -j10 && \
+    make -s install
 
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 RUN  wget -q  ${NASM_REPO} && \
-        tar -xaf nasm* && \
-        cd nasm-${NASM_VER} && \
-        ./autogen.sh && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-        make -s -j10 && \
-        make -s install
+     tar -xaf nasm* && \
+     cd nasm-${NASM_VER} && \
+     ./autogen.sh && \
+     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+     make -s -j10 && \
+     make -s install
 
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
-        cd yasm-${YASM_VER} && \
-        sed -i "s/) ytasm.*/)/" Makefile.in && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-        make -s -j10 && \
-        make -s install
+     cd yasm-${YASM_VER} && \
+     sed -i "s/) ytasm.*/)/" Makefile.in && \
+     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+     make -s -j10 && \
+     make -s install
 
 # Build ogg
 ARG OGG_VER=1.3.3
 ARG OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz
 
 RUN wget -q  -O - ${OGG_REPO} | tar xJ && \
-        cd libogg-${OGG_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cd libogg-${OGG_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build vorbis
 ARG VORBIS_VER=1.3.6
 ARG VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz
 
 RUN wget -q  -O - ${VORBIS_REPO} | tar xJ && \
-        cd libvorbis-${VORBIS_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cd libvorbis-${VORBIS_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build mp3lame
 ARG MP3LAME_VER=3.100
 ARG MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz
 
 RUN wget -q  -O - ${MP3LAME_REPO} | tar xz && \
-        cd lame-${MP3LAME_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cd lame-${MP3LAME_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build fdk-aac
 ARG FDK_AAC_VER=v0.1.6
 ARG FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz
 
 RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
-        cd fdk-aac && \
-        autoreconf -fiv && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
-
+    cd fdk-aac && \
+    autoreconf -fiv && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build opus
 ARG OPUS_VER=1.2.1
 ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
 
 RUN wget -q  -O - ${OPUS_REPO} | tar xz && \
-        cd opus-${OPUS_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cd opus-${OPUS_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build vpx
 ARG VPX_VER=tags/v1.7.0
 ARG VPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 
 RUN git clone ${VPX_REPO} && \
-        cd libvpx && \
-        git checkout ${VPX_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
-
+    cd libvpx && \
+    git checkout ${VPX_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Build AOM
 ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
 ARG AOM_REPO=https://aomedia.googlesource.com/aom
 
 RUN  git clone ${AOM_REPO} && \
-        mkdir aom/aom_build && \
-        cd aom/aom_build && \
-        git checkout ${AOM_VER} && \
-        cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
-        make -s -j10 && \
-        make -s install DESTDIR="/home/build" && \
-        make -s install
+     mkdir aom/aom_build && \
+     cd aom/aom_build && \
+     git checkout ${AOM_VER} && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x264
 ARG X264_VER=stable
 ARG X264_REPO=https://github.com/mirror/x264
 
 RUN  git clone ${X264_REPO} && \
-        cd x264 && \
-        git checkout ${X264_VER} && \
-        ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-        make -s -j10 && \
-        make -s install DESTDIR="/home/build" && \
-        make -s install
-
+     cd x264 && \
+     git checkout ${X264_VER} && \
+     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Build x265
 ARG X265_VER=2.9
@@ -147,28 +144,28 @@ ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 RUN  yum install -y -q numactl-devel libpciaccess-devel
 
 RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-        cd x265/build/linux && \
-        cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
-        make -s -j10 && \
-        make -s install DESTDIR="/home/build" && \
-        make -s install
+     cd x265/build/linux && \
+     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
+     make -s -j10 && \
+     make -s install DESTDIR="/home/build" && \
+     make -s install
 
 # Fetch SVT-HEVC
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
 ARG SVT_HEVC_REPO=https://github.com/intel/SVT-HEVC
 
 RUN yum install -y -q patch centos-release-scl && \
-        yum install -y -q devtoolset-7
+    yum install -y -q devtoolset-7
 
 RUN git clone ${SVT_HEVC_REPO} && \
-        cd SVT-HEVC/Build/linux && \
-        git checkout ${SVT_HEVC_VER} && \
-        mkdir -p ../../Bin/Release && \
-        ( source /opt/rh/devtoolset-7/enable && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install )
+    cd SVT-HEVC/Build/linux && \
+    git checkout ${SVT_HEVC_VER} && \
+    mkdir -p ../../Bin/Release && \
+    ( source /opt/rh/devtoolset-7/enable && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install )
 
 
 # Fetch SVT-AV1
@@ -176,13 +173,13 @@ ARG SVT_AV1_VER=90b56a80795d4d0448673c4c7276ce6d5c8ac9d4
 ARG SVT_AV1_REPO=https://github.com/OpenVisualCloud/SVT-AV1
 
 RUN git clone ${SVT_AV1_REPO} && \
-        cd SVT-AV1/Build/linux && \
-        git checkout ${SVT_AV1_VER} && \
-        mkdir -p ../../Bin/Release && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cd SVT-AV1/Build/linux && \
+    git checkout ${SVT_AV1_VER} && \
+    mkdir -p ../../Bin/Release && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 #Remove build residue from SVT-AV1 build -- temp fix for bug
 RUN if [ -d "build/home/" ]; then rm -rf build/home/; fi
@@ -193,14 +190,14 @@ ARG SVT_VP9_VER=d18b4acf9139be2e83150e318ffd3dba1c432e74
 ARG SVT_VP9_REPO=https://github.com/OpenVisualCloud/SVT-VP9
 
 RUN git clone ${SVT_VP9_REPO} && \
-        cd SVT-VP9/Build/linux && \
-        git checkout ${SVT_VP9_VER} && \
-        mkdir -p ../../Bin/Release && \
-        ( source /opt/rh/devtoolset-7/enable && \
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install )
+    cd SVT-VP9/Build/linux && \
+    git checkout ${SVT_VP9_VER} && \
+    mkdir -p ../../Bin/Release && \
+  ( source /opt/rh/devtoolset-7/enable && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install )
 
 # Build the gstremaer core
 ARG GST_VER=1.14.4
@@ -208,8 +205,8 @@ ARG GST_REPO=https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${GST_VER
 
 RUN  yum install -y -q glib2-devel-2.56.1 gettext-devel gobject-introspection gobject-introspection-devel python-gobject-base
 RUN  wget -q  -O - ${GST_REPO} | tar xJ && \
-        cd gstreamer-${GST_VER} && \
-        ./autogen.sh \
+     cd gstreamer-${GST_VER} && \
+     ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/lib64 \
         --libexecdir=/usr/lib64 \
@@ -219,9 +216,9 @@ RUN  wget -q  -O - ${GST_REPO} | tar xJ && \
         --disable-debug \
         --disable-benchmarks \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install;
+     make -s -j10 && \
+     make -s install DESTDIR=/home/build && \
+     make -s install;
 
 # Build the gstremaer plugin base
 ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${GST_VER}.tar.xz
@@ -229,8 +226,8 @@ ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/
 RUN  yum install -y -q libXv-devel libvisual-devel libtheora-devel glib2-devel alsa-lib-devel cdparanoia-devel mesa-libGL-devel pango-devel
 
 RUN  wget -q  -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
-        cd gst-plugins-base-${GST_VER} && \
-        ./autogen.sh \
+     cd gst-plugins-base-${GST_VER} && \
+     ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/lib64 \
         --libexecdir=/usr/lib64 \
@@ -238,9 +235,9 @@ RUN  wget -q  -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+     make -s -j10 && \
+     make -s install DESTDIR=/home/build && \
+     make -s install
 
 
 # Build the gstremaer plugin good set
@@ -249,17 +246,17 @@ ARG GST_PLUGIN_GOOD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-good/
 RUN  yum install -y -q libsoup-devel libjpeg-devel
 
 RUN  wget -q  -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
-        cd gst-plugins-good-${GST_VER} && \
-        ./autogen.sh \
+     cd gst-plugins-good-${GST_VER} && \
+     ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/lib64 \
         --libexecdir=/usr/lib64 \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+     make -s -j10 && \
+     make -s install DESTDIR=/home/build && \
+     make -s install
 
 
 # Build the gstremaer plugin bad set
@@ -268,33 +265,33 @@ ARG GST_PLUGIN_BAD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-bad/gs
 RUN  yum install -y -q openssl-devel
 
 RUN  wget -q  -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
-        cd gst-plugins-bad-${GST_VER} && \
-        ./autogen.sh \
+     cd gst-plugins-bad-${GST_VER} && \
+     ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/lib64 \
         --libexecdir=/usr/lib64 \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+     make -s -j10 && \
+     make -s install DESTDIR=/home/build && \
+     make -s install
 
 # Build the gstremaer plugin ugly set
 ARG GST_PLUGIN_UGLY_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${GST_VER}.tar.xz
 
 RUN  wget -q  -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
-        cd gst-plugins-ugly-${GST_VER}; \
-        ./autogen.sh \
+     cd gst-plugins-ugly-${GST_VER}; \
+     ./autogen.sh \
         --prefix=/usr \
         --libdir=/usr/lib64 \
         --libexecdir=/usr/lib64 \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+     make -s -j10 && \
+     make -s install DESTDIR=/home/build && \
+     make -s install
 
 # Build gst-libav
 ARG GST_PLUGIN_LIBAV_REPO=https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${GST_VER}.tar.xz
@@ -302,44 +299,44 @@ ARG GST_PLUGIN_LIBAV_REPO=https://gstreamer.freedesktop.org/src/gst-libav/gst-li
 RUN yum install -y -q zlib-devel openssl-devel
 
 RUN wget -q  -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
-        cd gst-libav-${GST_VER} && \
-        ./autogen.sh \
+    cd gst-libav-${GST_VER} && \
+    ./autogen.sh \
         --prefix="/usr" \
         --libdir=/usr/lib64 \
         --enable-shared \
         --enable-gpl \
         --disable-gtk-doc && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 
 # Build gstremaer plugin for svt
 
 RUN cd SVT-HEVC/gstreamer-plugin && \
-        cmake . && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cmake . && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 RUN cd SVT-VP9/gstreamer-plugin && \
-        cmake . && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cmake . && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 RUN cd SVT-AV1/gstreamer-plugin && \
-        cmake . && \
-        make -s -j10 && \
-        make -s install DESTDIR=/home/build && \
-        make -s install
+    cmake . && \
+    make -s -j10 && \
+    make -s install DESTDIR=/home/build && \
+    make -s install
 
 # Clean up after build
 RUN rm -rf /home/build/usr/include && \
-        rm -rf /home/build/usr/share/doc && \
-        rm -rf /home/build/usr/share/gtk-doc && \
-        rm -rf /home/build/usr/share/man && \
-        find /home/build -name "*.a" -exec rm -f {} \;
+    rm -rf /home/build/usr/share/doc && \
+    rm -rf /home/build/usr/share/gtk-doc && \
+    rm -rf /home/build/usr/share/man && \
+    find /home/build -name "*.a" -exec rm -f {} \;
 
 FROM centos:7.5.1804
 LABEL Description="This is the base image for GStreamer CentOS 7.5"
@@ -348,9 +345,10 @@ WORKDIR /home
 
 # Prerequisites
 RUN yum install -y epel-release; \
-        yum install -y -q numactl openssl glib2-2.56.1 pango gobject-introspection libpng12 libXv libvisual mesa-libGL pango glib2 alsa-lib libsoup libjpeg-turbo ; \
-        yum remove -y -q epel-release; \
-        rm -rf /var/cache/yum/*;
+    yum install -y -q numactl openssl glib2-2.56.1 pango gobject-introspection libpng12 libXv libvisual mesa-libGL pango glib2 alsa-lib libsoup libjpeg-turbo ; \
+    yum remove -y -q epel-release; \
+    rm -rf /var/cache/yum/*;
 
 # Install
 COPY --from=build /home/build /
+

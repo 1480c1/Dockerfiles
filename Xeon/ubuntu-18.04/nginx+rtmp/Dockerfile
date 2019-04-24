@@ -17,7 +17,7 @@ RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-RUN apt-get install -y -q automake
+    RUN apt-get install -y -q automake
 
 
 # Build nginx-rtmp
@@ -71,3 +71,4 @@ COPY --from=build /home/build /
 CMD /usr/sbin/nginx
 VOLUME /etc/nginx /var/www/html /var/www/tmp/client_body /var/www/tmp/proxy /var/www/tmp/fastcgi /var/www/tmp/uwsgi /var/www/tmp/scgi /var/www/cache /var/www/dash /var/www/hls
 EXPOSE 80 1935
+

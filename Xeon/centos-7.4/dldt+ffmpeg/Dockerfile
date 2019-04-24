@@ -1,64 +1,5 @@
-
 FROM centos:7.4.1708 AS build
 WORKDIR /home
-
-ARG CMAKE_VER=3.13.1
-ARG AUTOMAKE_VER=1.14
-ARG NASM_VER=2.13.03
-ARG YASM_VER=1.3.0
-ARG OGG_VER=1.3.3
-ARG VORBIS_VER=1.3.6
-ARG MP3LAME_VER=3.100
-ARG FDK_AAC_VER=v0.1.6
-ARG OPUS_VER=1.2.1
-ARG VPX_VER=tags/v1.7.0
-ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
-ARG X264_VER=stable
-ARG X265_VER=2.9
-ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
-ARG SVT_AV1_VER=90b56a80795d4d0448673c4c7276ce6d5c8ac9d4
-ARG SVT_VP9_VER=d18b4acf9139be2e83150e318ffd3dba1c432e74
-ARG DLDT_VER=2018_R5
-ARG LIBRDKAFKA_VER=0.11.6
-ARG FFMPEG_VER=n4.1
-ENV CMAKE_REPO=https://cmake.org/files \
-    AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz \
-    NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2 \
-    YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz \
-    OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz \
-    VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz  \
-    MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz \
-    FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz \
-    OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz \
-    VPX_REPO=https://chromium.googlesource.com/webm/libvpx.git \
-    AOM_REPO=https://aomedia.googlesource.com/aom \
-    X264_REPO=https://github.com/mirror/x264 \
-    X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz \
-    SVT_HEVC_REPO=https://github.com/intel/SVT-HEVC \
-    SVT_AV1_REPO=https://github.com/OpenVisualCloud/SVT-AV1 \
-    SVT_VP9_REPO=https://github.com/OpenVisualCloud/SVT-VP9 \
-    DLDT_REPO=https://github.com/opencv/dldt.git \
-    DLDT_C_API_REPO=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/thirdparty/0001-Add-inference-engine-C-API.patch \
-    libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64 \
-    LIBRDKAFKA_REPO=https://github.com/edenhill/librdkafka/archive/v${LIBRDKAFKA_VER}.tar.gz \
-    FFMPEG_REPO=https://github.com/FFmpeg/FFmpeg/archive/${FFMPEG_VER}.tar.gz \
-    FFMPEG_FLV_PATCH_REPO=https://raw.githubusercontent.com/VCDP/CDN/master/The-RTMP-protocol-extensions-for-H.265-HEVC.patch \
-    FFMPEG_1TN_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11625/raw \
-    FFMPEG_THREAD_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11035/raw \
-    FFMPEG_MA_PATCH_REPO_01=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0001-Intel-inference-engine-detection-filter.patch \
-    FFMPEG_MA_PATCH_REPO_02=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0002-New-filter-to-do-inference-classify.patch \
-    FFMPEG_MA_PATCH_REPO_03=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0003-iemetadata-convertor-muxer.patch \
-    FFMPEG_MA_PATCH_REPO_04=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0004-Kafka-protocol-producer.patch \
-    FFMPEG_MA_PATCH_REPO_05=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0005-Support-object-detection-and-featured-face-identific.patch \
-    FFMPEG_MA_PATCH_REPO_06=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0006-Send-metadata-in-a-packet-and-refine-the-json-format.patch \
-    FFMPEG_MA_PATCH_REPO_07=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0007-Refine-features-of-IE-filters.patch \
-    FFMPEG_MA_PATCH_REPO_08=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0008-fixed-extra-comma-in-iemetadata.patch \
-    FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch \
-    FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
-
-RUN yum install -y time
-
-SHELL [ "/usr/bin/time","-p","/bin/bash","-c" ]
 
 # COMMON BUILD TOOLS
 RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
@@ -71,27 +12,6 @@ RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     gcc-c++ git glibc-devel glibc-static libass-devel libgcc libpciaccess-devel \
     libstdc++ libstdc++-devel libstdc++-static libtool libusbx-devel make \
     numactl-devel openblas-devel openssl-devel patch pkg-config wget zlib-devel;
-
-# Download repos
-RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
-    wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
-    wget -q  ${NASM_REPO} && tar -xaf nasm* && \
-    wget -q  -O - ${YASM_REPO} | tar xz && \
-    wget -q  -O - ${OGG_REPO} | tar xJ && \
-    wget -q  -O - ${VORBIS_REPO} | tar xJ && \
-    wget -q  -O - ${MP3LAME_REPO} | tar xz && \
-    wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
-    wget -q  -O - ${OPUS_REPO} | tar xz && \
-    git clone --depth 1 -b ${VPX_VER} ${VPX_REPO} && \
-    git clone --depth 1 -b ${AOM_VER} ${AOM_REPO} && \
-    git clone --depth 1 -b ${X264_VER} ${X264_REPO} && \
-    wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-    git clone --depth 1 -b ${SVT_HEVC_VER} ${SVT_HEVC_REPO} && \
-    git clone --depth 1 -b ${SVT_AV1_VER} ${SVT_AV1_REPO} && \
-    git clone --depth 1 -b ${SVT_VP9_VER} ${SVT_VP9_REPO} && \
-    git clone --depth 1 -b ${DLDT_VER} --recurse-submodules -j8 ${DLDT_REPO} && \
-    wget -q  -O - ${LIBRDKAFKA_REPO} | tar xz && \
-    wget -q  -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg
 
 # Install cmake
 RUN cd cmake-${CMAKE_VER} && \

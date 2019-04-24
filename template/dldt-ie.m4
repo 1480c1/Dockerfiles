@@ -1,16 +1,9 @@
 # Build DLDT-Inference Engine
-ARG DLDT_VER=2018_R5
-ARG DLDT_REPO=https://github.com/opencv/dldt.git
-ARG DLDT_C_API_REPO=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/thirdparty/0001-Add-inference-engine-C-API.patch
-
 ifelse(index(DOCKER_IMAGE,centos),-1,,dnl
 RUN yum install -y -q boost-devel glibc-static glibc-devel libstdc++-static libstdc++-devel libstdc++ libgcc libusbx-devel openblas-devel;
 )dnl
 
-RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
-    cd dldt && \
-    git submodule init && \
-    git submodule update --recursive && \
+RUN cd dldt && \
     cd inference-engine && \
     wget -q  -O - ${DLDT_C_API_REPO} | patch -p2 && \
     mkdir build && \
@@ -23,14 +16,14 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
     rm -rf ../bin/intel64/Release/lib/libtest*
 
 ifelse(index(DOCKER_IMAGE,ubuntu1604),-1,,
-    ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_16.04/intel64
+    ENV libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_16.04/intel64
 )dnl
 ifelse(index(DOCKER_IMAGE,ubuntu1804),-1,,
-    ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
+    ENV libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
     #RUN find dldt/inference-engine/cmake/share/ -type f | xargs sed -i 's/16.04/18.04/g'
 )dnl
 ifelse(index(DOCKER_IMAGE,centos),-1,,
-    ARG libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
+    ENV libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
 )dnl
 
 RUN mkdir -p /opt/intel/dldt/inference-engine/include && \
@@ -81,9 +74,7 @@ ARG PYTHON_TRUSTED_HOST
 ARG PYTHON_TRUSTED_INDEX_URL
 #install MO dependencies
 #RUN pip3 install numpy scipy
-RUN git clone https://github.com/google/protobuf.git && \
-    cd protobuf && \
-    git submodule update --init --recursive && \
+RUN cd protobuf && \
     ./autogen.sh && \
     ./configure && \
     make && \
@@ -112,13 +103,13 @@ ENV PYTHONPATH=${PYTHONPATH}:/mo_libs
 
 define(`INSTALL_IE',dnl
 ifelse(index(DOCKER_IMAGE,ubuntu1604),-1,,
-ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_16.04/intel64
+ENV libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_16.04/intel64
 )dnl
 ifelse(index(DOCKER_IMAGE,ubuntu1804),-1,,
-ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
+ENV libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
 )dnl
 ifelse(index(DOCKER_IMAGE,centos),-1,,
-ARG libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
+ENV libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
 )dnl
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/intel/dldt/inference-engine/external/omp/lib:${libdir}
 ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
