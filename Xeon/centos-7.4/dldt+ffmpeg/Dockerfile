@@ -56,7 +56,7 @@ ENV CMAKE_REPO=https://cmake.org/files \
     FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch \
     FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
 
-SHELL [ "/bin/bash","-c","time" ]
+SHELL [ "/bin/bash","-c" ]
 
 # COMMON BUILD TOOLS
 RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
