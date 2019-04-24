@@ -6,6 +6,6 @@ define(`FFMPEG_CONFIG_OPUS',--enable-libopus )dnl
 RUN wget -O - ${OPUS_REPO} | tar xz && \
     cd opus-${OPUS_VER} && \
     ./configure --prefix="/usr" --libdir=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) --enable-defn(`BUILD_LINKAGE') && \
-    make -s -j20 && \
+    make -s -j20 >/dev/null && \
     make -s install DESTDIR=/home/build && \
     make -s install

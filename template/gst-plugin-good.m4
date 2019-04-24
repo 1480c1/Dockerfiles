@@ -17,7 +17,7 @@ RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         --enable-defn(`BUILD_LINKAGE') \
         --disable-examples ifelse(index(DOCKER_IMAGE,-dev),-1,--disable-debug) \
         --disable-gtk-doc && \
-     make -s -j20 && \
+     make -s -j20 >/dev/null && \
      make -s install DESTDIR=/home/build && \
      make -s install
 

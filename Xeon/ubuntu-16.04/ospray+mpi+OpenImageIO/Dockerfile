@@ -11,7 +11,7 @@ ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -s -j20 && \
+    make -s -j20 >/dev/null && \
     make -s install
 
 # Install automake, use version 1.14 on CentOS
@@ -27,7 +27,7 @@ RUN  wget ${NASM_REPO} && \
     cd nasm-${NASM_VER} && \
     ./autogen.sh && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j20 && \
+    make -s -j20 >/dev/null && \
     make -s install
 
 # Build YASM
@@ -37,7 +37,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
     cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-    make -s -j20 && \
+    make -s -j20 >/dev/null && \
     make -s install
 
 #build ISPC
@@ -58,7 +58,7 @@ RUN git clone ${EMBREE_REPO} && \
     cd embree/build && \
     git checkout ${EMBREE_VER} && \
     cmake .. -Wno-dev -DEMBREE_TUTORIALS=OFF && \
-    make -s -j20 && \
+    make -s -j20 >/dev/null && \
     make -s install
 
 #build ospray
