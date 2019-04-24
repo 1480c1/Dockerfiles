@@ -62,7 +62,7 @@ RUN git clone ${EMBREE_REPO} && \
     cd embree/build && \
     git checkout ${EMBREE_VER} && \
     cmake .. -Wno-dev -DEMBREE_TUTORIALS=OFF && \
-    make -s -j20 8 && \
+    make -s -j20 && \
     make install
 
 #build ospray
@@ -76,7 +76,7 @@ RUN git clone ${OpenEXR_REPO}; \
     cd openexr/build; \
     git checkout ${OpenEXR_VER}; \
     cmake ..; \
-    make -s -j20 8; \
+    make -s -j20; \
     make install
 
 ARG OpenImageIO_VER=5daa9a1
@@ -86,7 +86,7 @@ RUN git clone ${OpenImageIO_REPO}; \
     cd oiio/build; \
     git checkout ${OpenImageIO_VER}; \
     cmake ..; \
-    make -s -j20 8; \
+    make -s -j20; \
     make install
 
 #build ospray
@@ -102,7 +102,7 @@ RUN git clone ${OSPRAY_REPO}; \
     cd ospray/build; \
     git checkout ${OSPRAY_VER}; \
     cmake .. -DOSPRAY_MODULE_MPI=ON -DOSPRAY_SG_OPENIMAGEIO=ON; \
-    make -s -j20 8
+    make -s -j20
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build
 
 RUN mkdir -p /var/run/sshd; \

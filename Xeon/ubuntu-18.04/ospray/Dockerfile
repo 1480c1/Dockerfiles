@@ -58,7 +58,7 @@ RUN git clone ${EMBREE_REPO} && \
     cd embree/build && \
     git checkout ${EMBREE_VER} && \
     cmake .. -Wno-dev -DEMBREE_TUTORIALS=OFF && \
-    make -s -j20 8 && \
+    make -s -j20 && \
     make install
 
 #build ospray
@@ -72,7 +72,7 @@ RUN git clone ${OSPRAY_REPO} && \
     cd ospray/build && \
     git checkout ${OSPRAY_VER} && \
     cmake .. && \
-    make -s -j20 8
+    make -s -j20
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build
 
 #include(ospray-example_xfrog.m4)
