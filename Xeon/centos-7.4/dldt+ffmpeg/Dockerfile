@@ -3,59 +3,60 @@ FROM centos:7.4.1708 AS build
 WORKDIR /home
 
 ARG CMAKE_VER=3.13.1
-ARG CMAKE_REPO=https://cmake.org/files
 ARG AUTOMAKE_VER=1.14
-ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
 ARG NASM_VER=2.13.03
-ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 ARG YASM_VER=1.3.0
-ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 ARG OGG_VER=1.3.3
-ARG OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz
 ARG VORBIS_VER=1.3.6
-ARG VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz
 ARG MP3LAME_VER=3.100
-ARG MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz
 ARG FDK_AAC_VER=v0.1.6
-ARG FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz
 ARG OPUS_VER=1.2.1
-ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
 ARG VPX_VER=tags/v1.7.0
-ARG VPX_REPO=https://chromium.googlesource.com/webm/libvpx.git
 ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
-ARG AOM_REPO=https://aomedia.googlesource.com/aom
 ARG X264_VER=stable
-ARG X264_REPO=https://github.com/mirror/x264
 ARG X265_VER=2.9
-ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
-ARG SVT_HEVC_REPO=https://github.com/intel/SVT-HEVC
 ARG SVT_AV1_VER=90b56a80795d4d0448673c4c7276ce6d5c8ac9d4
-ARG SVT_AV1_REPO=https://github.com/OpenVisualCloud/SVT-AV1
 ARG SVT_VP9_VER=d18b4acf9139be2e83150e318ffd3dba1c432e74
-ARG SVT_VP9_REPO=https://github.com/OpenVisualCloud/SVT-VP9
 ARG DLDT_VER=2018_R5
-ARG DLDT_REPO=https://github.com/opencv/dldt.git
-ARG DLDT_C_API_REPO=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/thirdparty/0001-Add-inference-engine-C-API.patch
-ARG libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
-ARG LIBRDKAFKA_VER=0.11.6
-ARG FILE_NAME=v${LIBRDKAFKA_VER}
-ARG LIBRDKAFKA_REPO=https://github.com/edenhill/librdkafka/archive/${FILE_NAME}.tar.gz
+ARG LIBRDKAFKA_VER=v0.11.6
 ARG FFMPEG_VER=n4.1
-ARG FFMPEG_REPO=https://github.com/FFmpeg/FFmpeg/archive/${FFMPEG_VER}.tar.gz
-ARG FFMPEG_FLV_PATCH_REPO=https://raw.githubusercontent.com/VCDP/CDN/master/The-RTMP-protocol-extensions-for-H.265-HEVC.patch
-ARG FFMPEG_1TN_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11625/raw
-ARG FFMPEG_THREAD_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11035/raw
-ARG FFMPEG_MA_PATCH_REPO_01=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0001-Intel-inference-engine-detection-filter.patch
-ARG FFMPEG_MA_PATCH_REPO_02=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0002-New-filter-to-do-inference-classify.patch
-ARG FFMPEG_MA_PATCH_REPO_03=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0003-iemetadata-convertor-muxer.patch
-ARG FFMPEG_MA_PATCH_REPO_04=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0004-Kafka-protocol-producer.patch
-ARG FFMPEG_MA_PATCH_REPO_05=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0005-Support-object-detection-and-featured-face-identific.patch
-ARG FFMPEG_MA_PATCH_REPO_06=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0006-Send-metadata-in-a-packet-and-refine-the-json-format.patch
-ARG FFMPEG_MA_PATCH_REPO_07=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0007-Refine-features-of-IE-filters.patch
-ARG FFMPEG_MA_PATCH_REPO_08=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0008-fixed-extra-comma-in-iemetadata.patch
-ARG FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch
-ARG FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
+ENV CMAKE_REPO=https://cmake.org/files \
+    AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz \
+    NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2 \
+    YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz \
+    OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz \
+    VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz  \
+    MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz \
+    FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz \
+    OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz \
+    VPX_REPO=https://chromium.googlesource.com/webm/libvpx.git \
+    AOM_REPO=https://aomedia.googlesource.com/aom \
+    X264_REPO=https://github.com/mirror/x264 \
+    X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz \
+    SVT_HEVC_REPO=https://github.com/intel/SVT-HEVC \
+    SVT_AV1_REPO=https://github.com/OpenVisualCloud/SVT-AV1 \
+    SVT_VP9_REPO=https://github.com/OpenVisualCloud/SVT-VP9 \
+    DLDT_REPO=https://github.com/opencv/dldt.git \
+    DLDT_C_API_REPO=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/thirdparty/0001-Add-inference-engine-C-API.patch \
+    libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64 \
+    LIBRDKAFKA_REPO=https://github.com/edenhill/librdkafka/archive/${LIBRDKAFKA_VER}.tar.gz \
+    FFMPEG_REPO=https://github.com/FFmpeg/FFmpeg/archive/${FFMPEG_VER}.tar.gz \
+    FFMPEG_FLV_PATCH_REPO=https://raw.githubusercontent.com/VCDP/CDN/master/The-RTMP-protocol-extensions-for-H.265-HEVC.patch \
+    FFMPEG_1TN_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11625/raw \
+    FFMPEG_THREAD_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11035/raw \
+    FFMPEG_MA_PATCH_REPO_01=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0001-Intel-inference-engine-detection-filter.patch \
+    FFMPEG_MA_PATCH_REPO_02=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0002-New-filter-to-do-inference-classify.patch \
+    FFMPEG_MA_PATCH_REPO_03=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0003-iemetadata-convertor-muxer.patch \
+    FFMPEG_MA_PATCH_REPO_04=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0004-Kafka-protocol-producer.patch \
+    FFMPEG_MA_PATCH_REPO_05=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0005-Support-object-detection-and-featured-face-identific.patch \
+    FFMPEG_MA_PATCH_REPO_06=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0006-Send-metadata-in-a-packet-and-refine-the-json-format.patch \
+    FFMPEG_MA_PATCH_REPO_07=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0007-Refine-features-of-IE-filters.patch \
+    FFMPEG_MA_PATCH_REPO_08=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0008-fixed-extra-comma-in-iemetadata.patch \
+    FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch \
+    FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
+
+SHELL [ "/bin/bash","-c" ]
 
 # COMMON BUILD TOOLS
 RUN yum install -y -q bzip2 make autoconf libtool git wget ca-certificates \
@@ -81,20 +82,20 @@ RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
 
 # Build NASM
 RUN  wget ${NASM_REPO} && \
-     tar -xaf nasm* && \
-     cd nasm-${NASM_VER} && \
-     ./autogen.sh && \
-     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-     make -j && \
-     make install
+    tar -xaf nasm* && \
+    cd nasm-${NASM_VER} && \
+    ./autogen.sh && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+    make -j && \
+    make install
 
 # Build YASM
 RUN  wget -O - ${YASM_REPO} | tar xz && \
-     cd yasm-${YASM_VER} && \
-     sed -i "s/) ytasm.*/)/" Makefile.in && \
-     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-     make -j && \
-     make install
+    cd yasm-${YASM_VER} && \
+    sed -i "s/) ytasm.*/)/" Makefile.in && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 && \
+    make -j && \
+    make install
 
 # Build ogg
 RUN wget -O - ${OGG_REPO} | tar xJ && \
@@ -150,31 +151,31 @@ RUN git clone ${VPX_REPO} && \
 
 # Build AOM
 RUN  git clone ${AOM_REPO} && \
-     mkdir aom/aom_build && \
-     cd aom/aom_build && \
-     git checkout ${AOM_VER} && \
-     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
-     make -j && \
-     make install DESTDIR="/home/build" && \
-     make install
+    mkdir aom/aom_build && \
+    cd aom/aom_build && \
+    git checkout ${AOM_VER} && \
+    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
+    make -j && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 # Build x264
 RUN  git clone ${X264_REPO} && \
-     cd x264 && \
-     git checkout ${X264_VER} && \
-     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-     make -j && \
-     make install DESTDIR="/home/build" && \
-     make install
+    cd x264 && \
+    git checkout ${X264_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
+    make -j && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 
 # Build x265
 RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-     cd x265/build/linux && \
-     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
-     make -j && \
-     make install DESTDIR="/home/build" && \
-     make install
+    cd x265/build/linux && \
+    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
+    make -j && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 # Fetch SVT-HEVC
 RUN git clone ${SVT_HEVC_REPO} && \
@@ -206,7 +207,7 @@ RUN git clone ${SVT_VP9_REPO} && \
     cd SVT-VP9/Build/linux && \
     git checkout ${SVT_VP9_VER} && \
     mkdir -p ../../Bin/Release && \
-  ( source /opt/rh/devtoolset-7/enable && \
+    ( source /opt/rh/devtoolset-7/enable && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -j && \
     make install DESTDIR=/home/build && \
@@ -252,19 +253,19 @@ RUN mkdir -p build/opt/intel/dldt/inference-engine/include && \
     cp -r dldt/inference-engine/temp/omp/lib/* build/opt/intel/dldt/inference-engine/external/omp/lib/
 
 RUN for p in /usr /home/build/usr /opt/intel/dldt/inference-engine /home/build/opt/intel/dldt/inference-engine; do \
-        pkgconfiglibdir="$p/lib64" && \
-        mkdir -p "${pkgconfiglibdir}/pkgconfig" && \
-        pc="${pkgconfiglibdir}/pkgconfig/dldt.pc" && \
-        echo "prefix=/opt" > "$pc" && \
-        echo "libdir=${libdir}" >> "$pc" && \
-        echo "includedir=/opt/intel/dldt/inference-engine/include" >> "$pc" && \
-        echo "" >> "$pc" && \
-        echo "Name: DLDT" >> "$pc" && \
-        echo "Description: Intel Deep Learning Deployment Toolkit" >> "$pc" && \
-        echo "Version: 5.0" >> "$pc" && \
-        echo "" >> "$pc" && \
-        echo "Libs: -L\${libdir} -linference_engine -linference_engine_c_wrapper" >> "$pc" && \
-        echo "Cflags: -I\${includedir}" >> "$pc"; \
+    pkgconfiglibdir="$p/lib64" && \
+    mkdir -p "${pkgconfiglibdir}/pkgconfig" && \
+    pc="${pkgconfiglibdir}/pkgconfig/dldt.pc" && \
+    echo "prefix=/opt" > "$pc" && \
+    echo "libdir=${libdir}" >> "$pc" && \
+    echo "includedir=/opt/intel/dldt/inference-engine/include" >> "$pc" && \
+    echo "" >> "$pc" && \
+    echo "Name: DLDT" >> "$pc" && \
+    echo "Description: Intel Deep Learning Deployment Toolkit" >> "$pc" && \
+    echo "Version: 5.0" >> "$pc" && \
+    echo "" >> "$pc" && \
+    echo "Libs: -L\${libdir} -linference_engine -linference_engine_c_wrapper" >> "$pc" && \
+    echo "Cflags: -I\${includedir}" >> "$pc"; \
     done;
 
 ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
@@ -326,8 +327,8 @@ LABEL Description="This is the image for DLDT and FFMPEG on CentOS 7.4" \
     Vendor="Intel Corporation"
 WORKDIR /home
 
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/intel/dldt/inference-engine/external/omp/lib:${libdir}
-ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/intel/dldt/inference-engine/external/omp/lib:${libdir} \
+    InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
 ARG libdir=/opt/intel/dldt/inference-engine/lib/centos_7.4/intel64
 # Prerequisites
 RUN yum install -y epel-release; \
