@@ -1,17 +1,17 @@
 #!/bin/bash -e
 
 if grep --quiet 'NAME="CentOS Linux"' /etc/os-release; then
-  yum install -y centos-release-scl wget
+  yum install -y centos-release-scl wget -q
   yum install -y rh-python36
   source /opt/rh/rh-python36/enable
 else
   apt-get update
-  apt-get install -y wget make python3 python3-pip
+  apt-get install -y wget -q  make python3 python3-pip
 fi
 
 pip3 install pyyaml requests
 
-wget -q -O - https://github.com/opencv/open_model_zoo/archive/2018_R5.tar.gz | tar xz && \
+wget -q  -q -O - https://github.com/opencv/open_model_zoo/archive/2018_R5.tar.gz | tar xz && \
   cd open_model_zoo-2018_R5 && \
   cd model_downloader && \
   ./downloader.py --name vehicle-license-plate-detection-barrier-0106,vehicle-attributes-recognition-barrier-0039,license-plate-recognition-barrier-0001

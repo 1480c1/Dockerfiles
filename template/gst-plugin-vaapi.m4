@@ -13,7 +13,7 @@ RUN  apt-get update && apt-get install -y -q --no-install-recommends libxrandr-d
 
 #RUN  git clone https://gitlab.freedesktop.org/gstreamer/gstreamer-vaapi.git -b 1.14 --depth 10 && \
 #     cd gstreamer-vaapi && git reset --hard ${GST_PLUGIN_VAAPI_REPO_DISPLAY_LOCK_PATCH_HASH} && \
-RUN  wget -O - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
      cd gstreamer-vaapi-${GST_VER} && \
      ./autogen.sh \
         --prefix=/usr \

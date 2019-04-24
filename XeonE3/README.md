@@ -15,7 +15,7 @@ Kernel version 4.18 or later is recommended for feature and performance. The fol
 
 <br>
 
-(2) wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.18.16.tar.xz | tar xJ
+(2) wget -q  https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.18.16.tar.xz | tar xJ
 (3) cd linux-4.18.16
 (4) make olddefconfig
 (5) make -j

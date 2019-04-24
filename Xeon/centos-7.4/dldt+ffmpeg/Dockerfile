@@ -59,35 +59,35 @@ ENV CMAKE_REPO=https://cmake.org/files \
 SHELL [ "/bin/bash","-c" ]
 
 # COMMON BUILD TOOLS
-# bzip2 make autoconf libtool git wget ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release numactl-devel libpciaccess-devel patch centos-release-scl devtoolset-7 boost-devel glibc-static glibc-devel libstdc++-static libstdc++-devel libstdc++ libgcc libusbx-devel openblas-devel libass-devel freetype-devel zlib-devel openssl-devel
+# bzip2 make autoconf libtool git wget -q  ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release numactl-devel libpciaccess-devel patch centos-release-scl devtoolset-7 boost-devel glibc-static glibc-devel libstdc++-static libstdc++-devel libstdc++ libgcc libusbx-devel openblas-devel libass-devel freetype-devel zlib-devel openssl-devel
 
 RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     centos-release-scl devtoolset-7 epel-release flex freetype-devel gcc \
     gcc-c++ git glibc-devel glibc-static libass-devel libgcc libpciaccess-devel \
     libstdc++ libstdc++-devel libstdc++-static libtool libusbx-devel make \
-    numactl-devel openblas-devel openssl-devel patch pkg-config wget zlib-devel; \
+    numactl-devel openblas-devel openssl-devel patch pkg-config wget -q  zlib-devel; \
     yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     centos-release-scl devtoolset-7 epel-release flex freetype-devel gcc \
     gcc-c++ git glibc-devel glibc-static libass-devel libgcc libpciaccess-devel \
     libstdc++ libstdc++-devel libstdc++-static libtool libusbx-devel make \
-    numactl-devel openblas-devel openssl-devel patch pkg-config wget zlib-devel;
+    numactl-devel openblas-devel openssl-devel patch pkg-config wget -q  zlib-devel;
 
 # Install cmake
-RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
     make -s -j20 >/dev/null && \
     make -s install
 
 # Install automake, use version 1.14 on CentOS
-RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
+RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
     cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
     make -s -j20 >/dev/null && \
     make -s install
 
 # Build NASM
-RUN  wget ${NASM_REPO} && \
+RUN  wget -q  ${NASM_REPO} && \
     tar -xaf nasm* && \
     cd nasm-${NASM_VER} && \
     ./autogen.sh && \
@@ -96,7 +96,7 @@ RUN  wget ${NASM_REPO} && \
     make -s install
 
 # Build YASM
-RUN  wget -O - ${YASM_REPO} | tar xz && \
+RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
     cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
@@ -104,7 +104,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
     make -s install
 
 # Build ogg
-RUN wget -O - ${OGG_REPO} | tar xJ && \
+RUN wget -q  -O - ${OGG_REPO} | tar xJ && \
     cd libogg-${OGG_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
     make -s -j20 >/dev/null && \
@@ -112,7 +112,7 @@ RUN wget -O - ${OGG_REPO} | tar xJ && \
     make -s install
 
 # Build vorbis
-RUN wget -O - ${VORBIS_REPO} | tar xJ && \
+RUN wget -q  -O - ${VORBIS_REPO} | tar xJ && \
     cd libvorbis-${VORBIS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
     make -s -j20 >/dev/null && \
@@ -120,7 +120,7 @@ RUN wget -O - ${VORBIS_REPO} | tar xJ && \
     make -s install
 
 # Build mp3lame
-RUN wget -O - ${MP3LAME_REPO} | tar xz && \
+RUN wget -q  -O - ${MP3LAME_REPO} | tar xz && \
     cd lame-${MP3LAME_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
     make -s -j20 >/dev/null && \
@@ -128,7 +128,7 @@ RUN wget -O - ${MP3LAME_REPO} | tar xz && \
     make -s install
 
 # Build fdk-aac
-RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
+RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
     cd fdk-aac && \
     autoreconf -fiv && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
@@ -138,7 +138,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
 
 
 # Build opus
-RUN wget -O - ${OPUS_REPO} | tar xz && \
+RUN wget -q  -O - ${OPUS_REPO} | tar xz && \
     cd opus-${OPUS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
     make -s -j20 >/dev/null && \
@@ -176,7 +176,7 @@ RUN  git clone ${X264_REPO} && \
 
 
 # Build x265
-RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
+RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
     cd x265/build/linux && \
     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
     make -s -j20 >/dev/null && \
@@ -226,7 +226,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
     git submodule init && \
     git submodule update --recursive && \
     cd inference-engine && \
-    wget -O - ${DLDT_C_API_REPO} | patch -p2 && \
+    wget -q  -O - ${DLDT_C_API_REPO} | patch -p2 && \
     mkdir build && \
     cd build && \
     cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
@@ -282,7 +282,7 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/i
 
 
 # Build librdkafka
-RUN wget -O - ${LIBRDKAFKA_REPO} | tar xz && \
+RUN wget -q  -O - ${LIBRDKAFKA_REPO} | tar xz && \
     cd librdkafka-${LIBRDKAFKA_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 && \
     make -s -j20 >/dev/null && \
@@ -290,21 +290,21 @@ RUN wget -O - ${LIBRDKAFKA_REPO} | tar xz && \
     make -s install;
 
 # Fetch FFmpeg source
-RUN wget -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg && \
+RUN wget -q  -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg && \
     cd FFmpeg && \
-    wget -O - ${FFMPEG_FLV_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_1TN_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_THREAD_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_01} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_02} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_03} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_04} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_05} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_06} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_07} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_08} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_09} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_10} | patch -p1;
+    wget -q  -O - ${FFMPEG_FLV_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_1TN_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_THREAD_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_01} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_02} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_03} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_04} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_05} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_06} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_07} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_08} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_09} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_10} | patch -p1;
 
 # Patch FFmpeg source for SVT-HEVC
 RUN cd /home/FFmpeg && \

@@ -8,7 +8,7 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,
 RUN  yum install -y -q libsoup-devel libjpeg-devel
 )dnl
 
-RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
      cd gst-plugins-good-${GST_VER} && \
      ./autogen.sh \
         --prefix=/usr \

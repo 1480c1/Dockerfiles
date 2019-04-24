@@ -3,12 +3,12 @@ FROM ubuntu:18.04 AS build
 WORKDIR /home
 
 # COMMON BUILD TOOLS
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget -q  pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
 
 # Install cmake
 ARG CMAKE_VER=3.13.1
 ARG CMAKE_REPO=https://cmake.org/files
-RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
     make -s -j20 >/dev/null && \
@@ -22,7 +22,7 @@ RUN apt-get install -y -q automake
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
-RUN  wget ${NASM_REPO} && \
+RUN  wget -q  ${NASM_REPO} && \
     tar -xaf nasm* && \
     cd nasm-${NASM_VER} && \
     ./autogen.sh && \
@@ -33,7 +33,7 @@ RUN  wget ${NASM_REPO} && \
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
-RUN  wget -O - ${YASM_REPO} | tar xz && \
+RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
     cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
@@ -44,7 +44,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
 
 ARG ISPC_VER=1.9.1
 ARG ISPC_REPO=https://downloads.sourceforge.net/project/ispcmirror/v${ISPC_VER}/ispc-v${ISPC_VER}-linux.tar.gz
-RUN wget -O - ${ISPC_REPO} | tar xz
+RUN wget -q  -O - ${ISPC_REPO} | tar xz
 ENV ISPC_EXECUTABLE=/home/ispc-v${ISPC_VER}-linux/ispc
 
 #build embree

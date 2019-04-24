@@ -3,12 +3,12 @@ FROM ubuntu:16.04 AS build
 WORKDIR /home
 
 # COMMON BUILD TOOLS
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget -q  pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
 
 # Install cmake
 ARG CMAKE_VER=3.13.1
 ARG CMAKE_REPO=https://cmake.org/files
-RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
         cd cmake-${CMAKE_VER} && \
         ./bootstrap --prefix="/usr" && \
         make -s -j20 >/dev/null && \
@@ -22,7 +22,7 @@ RUN apt-get install -y -q automake
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
-RUN  wget ${NASM_REPO} && \
+RUN  wget -q  ${NASM_REPO} && \
         tar -xaf nasm* && \
         cd nasm-${NASM_VER} && \
         ./autogen.sh && \
@@ -33,7 +33,7 @@ RUN  wget ${NASM_REPO} && \
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
-RUN  wget -O - ${YASM_REPO} | tar xz && \
+RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
         cd yasm-${YASM_VER} && \
         sed -i "s/) ytasm.*/)/" Makefile.in && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
@@ -44,7 +44,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
 ARG OGG_VER=1.3.3
 ARG OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz
 
-RUN wget -O - ${OGG_REPO} | tar xJ && \
+RUN wget -q  -O - ${OGG_REPO} | tar xJ && \
         cd libogg-${OGG_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
         make -s -j20 >/dev/null && \
@@ -55,7 +55,7 @@ RUN wget -O - ${OGG_REPO} | tar xJ && \
 ARG VORBIS_VER=1.3.6
 ARG VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz
 
-RUN wget -O - ${VORBIS_REPO} | tar xJ && \
+RUN wget -q  -O - ${VORBIS_REPO} | tar xJ && \
         cd libvorbis-${VORBIS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
         make -s -j20 >/dev/null && \
@@ -66,7 +66,7 @@ RUN wget -O - ${VORBIS_REPO} | tar xJ && \
 ARG MP3LAME_VER=3.100
 ARG MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz
 
-RUN wget -O - ${MP3LAME_REPO} | tar xz && \
+RUN wget -q  -O - ${MP3LAME_REPO} | tar xz && \
         cd lame-${MP3LAME_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared --enable-nasm && \
         make -s -j20 >/dev/null && \
@@ -77,7 +77,7 @@ RUN wget -O - ${MP3LAME_REPO} | tar xz && \
 ARG FDK_AAC_VER=v0.1.6
 ARG FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz
 
-RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
+RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
         cd fdk-aac && \
         autoreconf -fiv && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
@@ -90,7 +90,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
 ARG OPUS_VER=1.2.1
 ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
 
-RUN wget -O - ${OPUS_REPO} | tar xz && \
+RUN wget -q  -O - ${OPUS_REPO} | tar xz && \
         cd opus-${OPUS_VER} && \
         ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
         make -s -j20 >/dev/null && \
@@ -142,7 +142,7 @@ ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libnuma-dev
 
-RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
+RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
         cd x265/build/linux && \
         cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
         make -s -j20 >/dev/null && \
@@ -204,7 +204,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
         git submodule init && \
         git submodule update --recursive && \
         cd inference-engine && \
-        wget -O - ${DLDT_C_API_REPO} | patch -p2 && \
+        wget -q  -O - ${DLDT_C_API_REPO} | patch -p2 && \
         mkdir build && \
         cd build && \
         cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
@@ -266,7 +266,7 @@ ARG GST_VER=1.14.4
 ARG GST_REPO=https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${GST_VER}.tar.xz
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libglib2.0-dev gobject-introspection libgirepository1.0-dev libpango-1.0-0 libpangocairo-1.0-0 autopoint
-RUN  wget -O - ${GST_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_REPO} | tar xJ && \
         cd gstreamer-${GST_VER} && \
         ./autogen.sh \
         --prefix=/usr \
@@ -286,7 +286,7 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
 ARG GST_ORC_VER=0.4.28
 ARG GST_ORC_REPO=https://gstreamer.freedesktop.org/src/orc/orc-${GST_ORC_VER}.tar.xz
 
-RUN  wget -O - ${GST_ORC_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_ORC_REPO} | tar xJ && \
         cd orc-${GST_ORC_VER} && \
         ./autogen.sh --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu \
         --libexecdir=/usr/lib/x86_64-linux-gnu \
@@ -302,7 +302,7 @@ ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libxv-dev libvisual-0.4-dev libtheora-dev libglib2.0-dev libasound2-dev libcdparanoia-dev libgl1-mesa-dev libpango1.0-dev
 
-RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         cd gst-plugins-base-${GST_VER} && \
         ./autogen.sh \
         --prefix=/usr \
@@ -322,7 +322,7 @@ ARG GST_PLUGIN_GOOD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-good/
 
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libsoup2.4-dev libjpeg-dev
 
-RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         cd gst-plugins-good-${GST_VER} && \
         ./autogen.sh \
         --prefix=/usr \
@@ -341,7 +341,7 @@ ARG GST_PLUGIN_BAD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-bad/gs
 
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libssl-dev
 
-RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
+RUN  wget -q  -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
         cd gst-plugins-bad-${GST_VER} && \
         ./autogen.sh \
         --prefix=/usr \
@@ -357,7 +357,7 @@ RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
 # Build the gstremaer plugin ugly set
 ARG GST_PLUGIN_UGLY_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${GST_VER}.tar.xz
 
-RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
+RUN  wget -q  -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
         cd gst-plugins-ugly-${GST_VER}; \
         ./autogen.sh \
         --prefix=/usr \
@@ -375,7 +375,7 @@ ARG GST_PLUGIN_LIBAV_REPO=https://gstreamer.freedesktop.org/src/gst-libav/gst-li
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends zlib1g-dev libssl-dev
 
-RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
+RUN wget -q  -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         cd gst-libav-${GST_VER} && \
         ./autogen.sh \
         --prefix="/usr" \
@@ -413,7 +413,7 @@ ARG OPENCV_REPO=https://github.com/opencv/opencv/archive/${OPENCV_VER}.tar.gz
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy
 
-RUN wget ${OPENCV_REPO} && \
+RUN wget -q  ${OPENCV_REPO} && \
         tar -zxvf ${OPENCV_VER}.tar.gz && \
         cd opencv-${OPENCV_VER} && \
         mkdir build && \
@@ -430,7 +430,7 @@ RUN apt-get install -y -q --no-install-recommends gtk-doc-tools
 
 ARG PAHO_VER=1.3.0
 ARG PAHO_REPO=https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
-RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
+RUN wget -q  -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
         cd paho.mqtt.c-${PAHO_VER}; \
         make; \
         make -s install;
@@ -439,7 +439,7 @@ RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
 #Has a dependency on OpenCV, GStreamer
 ARG VA_GSTREAMER_PLUGINS_VER=0.3.1
 ARG VA_GSTREAMER_PLUGINS_REPO=https://github.com/opencv/gst-video-analytics/archive/v${VA_GSTREAMER_PLUGINS_VER}.tar.gz
-RUN wget -O - ${VA_GSTREAMER_PLUGINS_REPO} | tar xz && \
+RUN wget -q  -O - ${VA_GSTREAMER_PLUGINS_REPO} | tar xz && \
         cd gst-video-analytics-${VA_GSTREAMER_PLUGINS_VER} && \
         mkdir build && \
         cd build && \

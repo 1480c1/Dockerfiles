@@ -10,7 +10,7 @@ RUN  ln -sf /usr/share/zoneinfo/UTC /etc/localtime;
 ifelse(index(DOCKER_IMAGE,centos),-1,,
 )dnl
 
-RUN wget ${OPENCV_REPO} && \
+RUN wget -q  ${OPENCV_REPO} && \
     tar -zxvf ${OPENCV_VER}.tar.gz && \
     cd opencv-${OPENCV_VER} && \
     mkdir build && \

@@ -23,21 +23,21 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,
 RUN yum install -y -q libass-devel freetype-devel ifelse(FFMPEG_X11,ON,SDL2-devel libxcb-devel )ifelse(index(DOCKER_IMAGE,xeon-),-1,libvdpau-devel )ifelse(index(DOCKER_IMAGE,-dev),-1,,texinfo )zlib-devel openssl-devel
 )dnl
 
-RUN wget -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg && \
+RUN wget -q  -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg && \
     cd FFmpeg && \
-    wget -O - ${FFMPEG_FLV_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_1TN_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_THREAD_PATCH_REPO} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_01} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_02} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_03} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_04} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_05} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_06} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_07} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_08} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_09} | patch -p1 && \
-    wget -O - ${FFMPEG_MA_PATCH_REPO_10} | patch -p1;
+    wget -q  -O - ${FFMPEG_FLV_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_1TN_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_THREAD_PATCH_REPO} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_01} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_02} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_03} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_04} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_05} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_06} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_07} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_08} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_09} | patch -p1 && \
+    wget -q  -O - ${FFMPEG_MA_PATCH_REPO_10} | patch -p1;
 
 defn(`FFMPEG_SOURCE_SVT_HEVC',`FFMPEG_SOURCE_SVT_AV1',`FFMPEG_SOURCE_TRANSFORM360')dnl
 # Compile FFmpeg

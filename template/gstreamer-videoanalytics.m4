@@ -13,7 +13,7 @@ ifelse(index(DOCKER_IMAGE,centos74),-1,,
 
 ARG PAHO_VER=1.3.0
 ARG PAHO_REPO=https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
-RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
+RUN wget -q  -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz | tar -xz; \
     cd paho.mqtt.c-${PAHO_VER}; \
     make; \
     make -s install;
@@ -22,7 +22,7 @@ RUN wget -O - https://github.com/eclipse/paho.mqtt.c/archive/v${PAHO_VER}.tar.gz
 #Has a dependency on OpenCV, GStreamer
 ARG VA_GSTREAMER_PLUGINS_VER=0.3.1
 ARG VA_GSTREAMER_PLUGINS_REPO=https://github.com/opencv/gst-video-analytics/archive/v${VA_GSTREAMER_PLUGINS_VER}.tar.gz
-RUN wget -O - ${VA_GSTREAMER_PLUGINS_REPO} | tar xz && \
+RUN wget -q  -O - ${VA_GSTREAMER_PLUGINS_REPO} | tar xz && \
     cd gst-video-analytics-${VA_GSTREAMER_PLUGINS_VER} && \
     mkdir build && \
     cd build && \

@@ -3,12 +3,12 @@ FROM centos:7.5.1804 AS build
 WORKDIR /home
 
 # COMMON BUILD TOOLS
-RUN yum install -y -q bzip2 make autoconf libtool git wget ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release;
+RUN yum install -y -q bzip2 make autoconf libtool git wget -q  ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release;
 
 # Install cmake
 ARG CMAKE_VER=3.13.1
 ARG CMAKE_REPO=https://cmake.org/files
-RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
     make -s -j20 >/dev/null && \
@@ -17,7 +17,7 @@ RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz 
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
+RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
     cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
     make -s -j20 >/dev/null && \
@@ -30,12 +30,12 @@ ARG NGINX_RTMP_REPO=https://github.com/arut/nginx-rtmp-module/archive/${NGINX_RT
 ARG NGINX_RTMP_PATCH_HLS=https://raw.githubusercontent.com/VCDP/CDN/master/0001-add-hevc-support-for-rtmp-and-hls.patch
 ARG NGINX_RTMP_PATCH_DASH=https://raw.githubusercontent.com/VCDP/CDN/master/0002-add-HEVC-support-for-dash.patch
 
-RUN wget -O - ${NGINX_RTMP_REPO} | tar xz && mv nginx-rtmp-module-${NGINX_RTMP_VER#v} nginx-rtmp-module && \
+RUN wget -q  -O - ${NGINX_RTMP_REPO} | tar xz && mv nginx-rtmp-module-${NGINX_RTMP_VER#v} nginx-rtmp-module && \
     cd nginx-rtmp-module && \
     mkdir -p /home/build/var/www/html && \
     cp -f stat.xsl /home/build/var/www/html && \
-    wget -O - ${NGINX_RTMP_PATCH_HLS} | patch -p1 && \
-    wget -O - ${NGINX_RTMP_PATCH_DASH} | patch -p1;
+    wget -q  -O - ${NGINX_RTMP_PATCH_HLS} | patch -p1 && \
+    wget -q  -O - ${NGINX_RTMP_PATCH_DASH} | patch -p1;
 
 # Build nginx & nginx-rtmp
 ARG NGINX_VER=1.14.2
@@ -43,7 +43,7 @@ ARG NGINX_REPO=https://nginx.org/download/nginx-${NGINX_VER}.tar.gz
 
 RUN yum install -y -q openssl-devel pcre2-devel zlib-devel libxslt-devel
 
-RUN wget -O - ${NGINX_REPO} | tar xz && \
+RUN wget -q  -O - ${NGINX_REPO} | tar xz && \
     cd nginx-${NGINX_VER} && \
     ./configure --prefix=/var/www --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/www/log/error.log --pid-path=/var/www/nginx.pid --lock-path=/var/www/nginx.lock --http-log-path=/var/www/log/access.log --http-client-body-temp-path=/var/www/tmp/client_body --http-proxy-temp-path=/var/www/tmp/proxy --http-fastcgi-temp-path=/var/www/tmp/fastcgi --http-uwsgi-temp-path=/var/www/tmp/uwsgi --http-scgi-temp-path=/var/www/tmp/scgi --user=nobody --group=nobody --with-select_module --with-poll_module --with-threads --with-file-aio --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-stream --with-stream_ssl_module --with-stream_realip_module --with-stream_ssl_preread_module --with-pcre --add-module=../nginx-rtmp-module  && \
     make -s -j20 >/dev/null && \
