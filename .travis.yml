@@ -56,7 +56,7 @@ script:
   - cd build
   - cmake ..
   - cd Xeon/${name}
-  - make -j
+  - make -j100
   - ctest
 matrix:
   fast_finish: true

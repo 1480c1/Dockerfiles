@@ -70,14 +70,14 @@ RUN yum install -y -q bzip2 make autoconf libtool git wget ca-certificates \
 RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -j && \
+    make -j100 && \
     make install
 
 # Install automake, use version 1.14 on CentOS
 RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
     cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
-    make -j && \
+    make -j100 && \
     make install
 
 # Build NASM
@@ -86,7 +86,7 @@ RUN  wget ${NASM_REPO} && \
     cd nasm-${NASM_VER} && \
     ./autogen.sh && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -j && \
+    make -j100 && \
     make install
 
 # Build YASM
@@ -94,14 +94,14 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
     cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -j && \
+    make -j100 && \
     make install
 
 # Build ogg
 RUN wget -O - ${OGG_REPO} | tar xJ && \
     cd libogg-${OGG_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -109,7 +109,7 @@ RUN wget -O - ${OGG_REPO} | tar xJ && \
 RUN wget -O - ${VORBIS_REPO} | tar xJ && \
     cd libvorbis-${VORBIS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -117,7 +117,7 @@ RUN wget -O - ${VORBIS_REPO} | tar xJ && \
 RUN wget -O - ${MP3LAME_REPO} | tar xz && \
     cd lame-${MP3LAME_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -126,7 +126,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
     cd fdk-aac && \
     autoreconf -fiv && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -135,7 +135,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
 RUN wget -O - ${OPUS_REPO} | tar xz && \
     cd opus-${OPUS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -144,7 +144,7 @@ RUN git clone ${VPX_REPO} && \
     cd libvpx && \
     git checkout ${VPX_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -155,7 +155,7 @@ RUN  git clone ${AOM_REPO} && \
     cd aom/aom_build && \
     git checkout ${AOM_VER} && \
     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR="/home/build" && \
     make install
 
@@ -164,7 +164,7 @@ RUN  git clone ${X264_REPO} && \
     cd x264 && \
     git checkout ${X264_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR="/home/build" && \
     make install
 
@@ -173,7 +173,7 @@ RUN  git clone ${X264_REPO} && \
 RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
     cd x265/build/linux && \
     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR="/home/build" && \
     make install
 
@@ -184,7 +184,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
     mkdir -p ../../Bin/Release && \
     ( source /opt/rh/devtoolset-7/enable && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install )
 
@@ -195,7 +195,7 @@ RUN git clone ${SVT_AV1_REPO} && \
     git checkout ${SVT_AV1_VER} && \
     mkdir -p ../../Bin/Release && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install
 
@@ -209,7 +209,7 @@ RUN git clone ${SVT_VP9_REPO} && \
     mkdir -p ../../Bin/Release && \
     ( source /opt/rh/devtoolset-7/enable && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install )
 
@@ -224,7 +224,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
     mkdir build && \
     cd build && \
     cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
-    make -j $(nproc) && \
+    make -j100 && \
     rm -rf ../bin/intel64/Release/lib/libgtest* && \
     rm -rf ../bin/intel64/Release/lib/libgmock* && \
     rm -rf ../bin/intel64/Release/lib/libmock* && \
@@ -279,7 +279,7 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/i
 RUN wget -O - ${LIBRDKAFKA_REPO} | tar xz && \
     cd librdkafka-${LIBRDKAFKA_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR=/home/build && \
     make install;
 
@@ -311,7 +311,7 @@ RUN cd /home/FFmpeg; \
 # Compile FFmpeg
 RUN cd /home/FFmpeg && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --extra-libs="-lpthread -lm" --enable-shared --enable-gpl --enable-libass --enable-libfreetype --disable-xlib --disable-sdl2 --enable-openssl --enable-nonfree --disable-vaapi --disable-hwaccels --disable-doc --disable-htmlpages --disable-manpages --disable-podpages --disable-txtpages --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-libaom --enable-libsvthevc --enable-libsvtav1 --enable-libinference_engine --enable-librdkafka  && \
-    make -j && \
+    make -j100 && \
     make install DESTDIR="/home/build"
 
 
