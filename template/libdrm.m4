@@ -12,7 +12,7 @@ RUN yum install -y -q libpciaccess-devel
 RUN wget -q  -O - ${LIBDRM_REPO} | tar xz && \
     cd libdrm-${LIBDRM_VER} && \
     ./configure --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install ;
 

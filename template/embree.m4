@@ -14,5 +14,5 @@ RUN git clone ${EMBREE_REPO} && \
     cd embree/build && \
     git checkout ${EMBREE_VER} && \
     cmake .. -Wno-dev -DEMBREE_TUTORIALS=OFF && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install

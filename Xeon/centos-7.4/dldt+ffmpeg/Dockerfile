@@ -56,7 +56,7 @@ ENV CMAKE_REPO=https://cmake.org/files \
     FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch \
     FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
 
-SHELL [ "/bin/bash","-c" ]
+SHELL [ "/bin/bash","-c","time" ]
 
 # COMMON BUILD TOOLS
 RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
@@ -70,138 +70,136 @@ RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     libstdc++ libstdc++-devel libstdc++-static libtool libusbx-devel make \
     numactl-devel openblas-devel openssl-devel patch pkg-config wget zlib-devel;
 
-
+# Download repos
+RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+    wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
+    wget -q  ${NASM_REPO} && tar -xaf nasm* && \
+    wget -q  -O - ${YASM_REPO} | tar xz && \
+    wget -q  -O - ${OGG_REPO} | tar xJ && \
+    wget -q  -O - ${VORBIS_REPO} | tar xJ && \
+    wget -q  -O - ${MP3LAME_REPO} | tar xz && \
+    wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
+    wget -q  -O - ${OPUS_REPO} | tar xz && \
+    git clone --depth 1 -b ${VPX_VER} ${VPX_REPO} && \
+    git clone --depth 1 -b ${AOM_VER} ${AOM_REPO} && \
+    git clone --depth 1 -b ${X264_VER} ${X264_REPO} && \
+    wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
+    git clone --depth 1 -b ${SVT_HEVC_VER} ${SVT_HEVC_REPO} && \
+    git clone --depth 1 -b ${SVT_AV1_VER} ${SVT_AV1_REPO} && \
+    git clone --depth 1 -b ${SVT_VP9_VER} ${SVT_VP9_REPO} && \
+    git clone --depth 1 -b ${DLDT_VER} --recurse-submodules -j8 ${DLDT_REPO} && \
+    wget -q  -O - ${LIBRDKAFKA_REPO} | tar xz && \
+    wget -q  -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg
 
 # Install cmake
-RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
-    cd cmake-${CMAKE_VER} && \
+RUN cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install
 
 # Install automake, use version 1.14 on CentOS
-RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
-    cd automake-${AUTOMAKE_VER} && \
+RUN cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install
 
 # Build NASM
-RUN  wget -q  ${NASM_REPO} && \
-    tar -xaf nasm* && \
-    cd nasm-${NASM_VER} && \
+RUN cd nasm-${NASM_VER} && \
     ./autogen.sh && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install
 
 # Build YASM
-RUN  wget -q  -O - ${YASM_REPO} | tar xz && \
-    cd yasm-${YASM_VER} && \
+RUN cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install
 
 # Build ogg
-RUN wget -q  -O - ${OGG_REPO} | tar xJ && \
-    cd libogg-${OGG_VER} && \
+RUN cd libogg-${OGG_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 # Build vorbis
-RUN wget -q  -O - ${VORBIS_REPO} | tar xJ && \
-    cd libvorbis-${VORBIS_VER} && \
+RUN cd libvorbis-${VORBIS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 # Build mp3lame
-RUN wget -q  -O - ${MP3LAME_REPO} | tar xz && \
-    cd lame-${MP3LAME_VER} && \
+RUN cd lame-${MP3LAME_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --enable-nasm && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 # Build fdk-aac
-RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
-    cd fdk-aac && \
+RUN cd fdk-aac && \
     autoreconf -fiv && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 
 # Build opus
-RUN wget -q  -O - ${OPUS_REPO} | tar xz && \
-    cd opus-${OPUS_VER} && \
+RUN cd opus-${OPUS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 # Build vpx
-RUN git clone ${VPX_REPO} && \
-    cd libvpx && \
-    git checkout ${VPX_VER} && \
+RUN cd libvpx && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=nasm && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
 
 # Build AOM
-RUN  git clone ${AOM_REPO} && \
-    mkdir aom/aom_build && \
+RUN mkdir aom/aom_build && \
     cd aom/aom_build && \
-    git checkout ${AOM_VER} && \
     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib64 .. && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR="/home/build" && \
     make -s install
 
 # Build x264
-RUN  git clone ${X264_REPO} && \
-    cd x264 && \
-    git checkout ${X264_VER} && \
+RUN cd x264 && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --enable-shared && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR="/home/build" && \
     make -s install
 
 
 # Build x265
-RUN  wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-    cd x265/build/linux && \
+RUN cd x265/build/linux && \
     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib64 ../../source && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR="/home/build" && \
     make -s install
 
 # Fetch SVT-HEVC
-RUN git clone ${SVT_HEVC_REPO} && \
-    cd SVT-HEVC/Build/linux && \
-    git checkout ${SVT_HEVC_VER} && \
+RUN cd SVT-HEVC/Build/linux && \
     mkdir -p ../../Bin/Release && \
     ( source /opt/rh/devtoolset-7/enable && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install )
 
 
 # Fetch SVT-AV1
-RUN git clone ${SVT_AV1_REPO} && \
-    cd SVT-AV1/Build/linux && \
-    git checkout ${SVT_AV1_VER} && \
+RUN cd SVT-AV1/Build/linux && \
     mkdir -p ../../Bin/Release && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 
@@ -209,28 +207,23 @@ RUN git clone ${SVT_AV1_REPO} && \
 RUN if [ -d "build/home/" ]; then rm -rf build/home/; fi
 
 # Fetch SVT-VP9
-RUN git clone ${SVT_VP9_REPO} && \
-    cd SVT-VP9/Build/linux && \
-    git checkout ${SVT_VP9_VER} && \
+RUN cd SVT-VP9/Build/linux && \
     mkdir -p ../../Bin/Release && \
     ( source /opt/rh/devtoolset-7/enable && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install )
 
 #include(transform360.m4)
 # Build DLDT-Inference Engine
-RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
-    cd dldt && \
-    git submodule init && \
-    git submodule update --recursive && \
+RUN cd dldt && \
     cd inference-engine && \
     wget -q  -O - ${DLDT_C_API_REPO} | patch -p2 && \
     mkdir build && \
     cd build && \
     cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
-    make -s -j20 && \
+    make -s -j10 && \
     rm -rf ../bin/intel64/Release/lib/libgtest* && \
     rm -rf ../bin/intel64/Release/lib/libgmock* && \
     rm -rf ../bin/intel64/Release/lib/libmock* && \
@@ -282,16 +275,14 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/i
 
 
 # Build librdkafka
-RUN wget -q  -O - ${LIBRDKAFKA_REPO} | tar xz && \
-    cd librdkafka-${LIBRDKAFKA_VER} && \
+RUN cd librdkafka-${LIBRDKAFKA_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install;
 
 # Fetch FFmpeg source
-RUN wget -q  -O - ${FFMPEG_REPO} | tar xz && mv FFmpeg-${FFMPEG_VER} FFmpeg && \
-    cd FFmpeg && \
+RUN cd FFmpeg && \
     wget -q  -O - ${FFMPEG_FLV_PATCH_REPO} | patch -p1 && \
     wget -q  -O - ${FFMPEG_1TN_PATCH_REPO} | patch -p1 && \
     wget -q  -O - ${FFMPEG_THREAD_PATCH_REPO} | patch -p1 && \
@@ -317,7 +308,7 @@ RUN cd /home/FFmpeg; \
 # Compile FFmpeg
 RUN cd /home/FFmpeg && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 --extra-libs="-lpthread -lm" --enable-shared --enable-gpl --enable-libass --enable-libfreetype --disable-xlib --disable-sdl2 --enable-openssl --enable-nonfree --disable-vaapi --disable-hwaccels --disable-doc --disable-htmlpages --disable-manpages --disable-podpages --disable-txtpages --enable-libfdk-aac --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-libaom --enable-libsvthevc --enable-libsvtav1 --enable-libinference_engine --enable-librdkafka  && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR="/home/build"
 
 

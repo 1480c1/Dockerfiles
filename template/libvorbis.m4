@@ -6,6 +6,6 @@ define(`FFMPEG_CONFIG_VORBIS',--enable-libvorbis )dnl
 RUN wget -q  -O - ${VORBIS_REPO} | tar xJ && \
     cd libvorbis-${VORBIS_VER} && \
     ./configure --prefix="/usr" --libdir=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) --enable-defn(`BUILD_LINKAGE') && \
-    make -s -j20 && \
+    make -s -j10 && \
     make -s install DESTDIR=/home/build && \
     make -s install
