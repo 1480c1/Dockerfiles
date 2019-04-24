@@ -7,6 +7,6 @@ RUN  git clone ${X264_REPO} && \
      cd x264 && \
      git checkout ${X264_VER} && \
      ./configure --prefix="/usr" --libdir=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) --enable-defn(`BUILD_LINKAGE') && \
-     make -s -j20 >/dev/null && \
+     make -s -j20 && \
      make -s install DESTDIR="/home/build" && \
      make -s install

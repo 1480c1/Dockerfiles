@@ -13,7 +13,7 @@ RUN kernel_version=$(cat /proc/version | cut -f3 -d' ') && \
     make olddefconfig && \
     sed -i 's/.* CONFIG_CRYPTO_SHA512 .*/CONFIG_CRYPTO_SHA512=y/' .config && \
     sed -i 's/.* CONFIG_UIO .*/CONFIG_UIO=y/' .config && \
-    yes "" | make -s -j20 >/dev/null && \
+    yes "" | make -s -j20 && \
     yes "" | make -s -j20 modules;
 
 # Build the QAT Driver

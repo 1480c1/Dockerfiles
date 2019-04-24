@@ -16,7 +16,7 @@ RUN wget -q  -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         --enable-defn(`BUILD_LINKAGE') \
         --enable-gpl \
         --disable-gtk-doc && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 

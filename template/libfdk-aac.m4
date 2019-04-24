@@ -7,6 +7,6 @@ RUN wget -q  -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aa
     cd fdk-aac && \
     autoreconf -fiv && \
     ./configure --prefix="/usr" --libdir=ifelse(index(DOCKER_IMAGE,ubuntu),-1,/usr/lib64,/usr/lib/x86_64-linux-gnu) --enable-defn(`BUILD_LINKAGE') && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install DESTDIR=/home/build && \
     make -s install

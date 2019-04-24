@@ -13,7 +13,7 @@ RUN wget -q  -O - ${MEDIA_DRIVER_REPO} | tar xz && mv media-driver-${MEDIA_DRIVE
     mkdir -p media-driver/build && \
     cd media-driver/build && \
     cmake -DBUILD_TYPE=release -DBUILD_ALONG_WITH_CMRTLIB=1 -DMEDIA_VERSION="2.0.0" -DBS_DIR_GMMLIB=/home/gmmlib/Source/GmmLib -DBS_DIR_COMMON=/home/gmmlib/Source/Common -DBS_DIR_INC=/home/gmmlib/Source/inc -DBS_DIR_MEDIA=/home/media-driver -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr .. && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install DESTDIR=/home/build && \
     make -s install
 

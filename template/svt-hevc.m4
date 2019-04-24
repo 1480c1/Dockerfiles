@@ -15,7 +15,7 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,`dnl
     ( source /opt/rh/devtoolset-7/enable && \
 ')dnl
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install DESTDIR=/home/build && \
     make -s install ifelse(index(DOCKER_IMAGE,centos),-1,,`)')
 

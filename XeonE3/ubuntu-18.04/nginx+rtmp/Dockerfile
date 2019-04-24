@@ -11,7 +11,7 @@ ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install
 
 # Install automake, use version 1.14 on CentOS
@@ -42,7 +42,7 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends libssl-dev l
 RUN wget -q  -O - ${NGINX_REPO} | tar xz && \
     cd nginx-${NGINX_VER} && \
     ./configure --prefix=/var/www --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/x86_64-linux-gnu/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/www/log/error.log --pid-path=/var/www/nginx.pid --lock-path=/var/www/nginx.lock --http-log-path=/var/www/log/access.log --http-client-body-temp-path=/var/www/tmp/client_body --http-proxy-temp-path=/var/www/tmp/proxy --http-fastcgi-temp-path=/var/www/tmp/fastcgi --http-uwsgi-temp-path=/var/www/tmp/uwsgi --http-scgi-temp-path=/var/www/tmp/scgi --user=www-data --group=www-data --with-select_module --with-poll_module --with-threads --with-file-aio --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-stream --with-stream_ssl_module --with-stream_realip_module --with-stream_ssl_preread_module --with-pcre --add-module=../nginx-rtmp-module  && \
-    make -s -j20 >/dev/null && \
+    make -s -j20 && \
     make -s install DESTDIR=/home/build;
 
 # NGINX Setup
