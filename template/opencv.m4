@@ -16,6 +16,6 @@ RUN wget ${OPENCV_REPO} && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -D BUILD_EXAMPLES=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_TESTS=OFF .. && \
-    make -j $(nproc) && \
+    make -j100 $(nproc) && \
     make install DESTDIR=/home/build && \
     make install

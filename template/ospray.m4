@@ -17,5 +17,5 @@ RUN git clone ${OSPRAY_REPO} && \
     cd ospray/build && \
     git checkout ${OSPRAY_VER} && \
     cmake .. && \
-    make -j 8
+    make -j100 8
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build

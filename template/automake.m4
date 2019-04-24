@@ -5,7 +5,7 @@ ifelse(index(DOCKER_IMAGE,ubuntu),-1,
     RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
     cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) --disable-doc && \
-    make -j && \
+    make -j100 && \
     make install
 ,dnl
     RUN apt-get install -y -q automake
