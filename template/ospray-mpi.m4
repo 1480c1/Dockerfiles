@@ -19,7 +19,7 @@ RUN git clone ${OSPRAY_REPO}; \
     cd ospray/build; \
     git checkout ${OSPRAY_VER}; \
     cmake .. -DOSPRAY_MODULE_MPI=ON -DOSPRAY_SG_OPENIMAGEIO=ON; \
-    make -j100 8
+    make -j20 8
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build
 
 RUN mkdir -p /var/run/sshd; \

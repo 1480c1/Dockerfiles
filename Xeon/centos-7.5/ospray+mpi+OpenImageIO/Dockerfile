@@ -11,7 +11,7 @@ ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -j100 && \
+    make -j20 && \
     make install
 
 # Install automake, use version 1.14 on CentOS
@@ -20,7 +20,7 @@ ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.
 RUN wget -O - ${AUTOMAKE_REPO} | tar xJ && \
     cd automake-${AUTOMAKE_VER} && \
     ./configure --prefix=/usr --libdir=/usr/lib64 --disable-doc && \
-    make -j100 && \
+    make -j20 && \
     make install
 
 # Build NASM
@@ -31,7 +31,7 @@ RUN  wget ${NASM_REPO} && \
     cd nasm-${NASM_VER} && \
     ./autogen.sh && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -j100 && \
+    make -j20 && \
     make install
 
 # Build YASM
@@ -41,7 +41,7 @@ RUN  wget -O - ${YASM_REPO} | tar xz && \
     cd yasm-${YASM_VER} && \
     sed -i "s/) ytasm.*/)/" Makefile.in && \
     ./configure --prefix="/usr" --libdir=/usr/lib64 && \
-    make -j100 && \
+    make -j20 && \
     make install
 
 #build ISPC
@@ -62,7 +62,7 @@ RUN git clone ${EMBREE_REPO} && \
     cd embree/build && \
     git checkout ${EMBREE_VER} && \
     cmake .. -Wno-dev -DEMBREE_TUTORIALS=OFF && \
-    make -j100 8 && \
+    make -j20 8 && \
     make install
 
 #build ospray
@@ -76,7 +76,7 @@ RUN git clone ${OpenEXR_REPO}; \
     cd openexr/build; \
     git checkout ${OpenEXR_VER}; \
     cmake ..; \
-    make -j100 8; \
+    make -j20 8; \
     make install
 
 ARG OpenImageIO_VER=5daa9a1
@@ -86,7 +86,7 @@ RUN git clone ${OpenImageIO_REPO}; \
     cd oiio/build; \
     git checkout ${OpenImageIO_VER}; \
     cmake ..; \
-    make -j100 8; \
+    make -j20 8; \
     make install
 
 #build ospray
@@ -102,7 +102,7 @@ RUN git clone ${OSPRAY_REPO}; \
     cd ospray/build; \
     git checkout ${OSPRAY_VER}; \
     cmake .. -DOSPRAY_MODULE_MPI=ON -DOSPRAY_SG_OPENIMAGEIO=ON; \
-    make -j100 8
+    make -j20 8
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build
 
 RUN mkdir -p /var/run/sshd; \

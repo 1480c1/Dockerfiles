@@ -2,18 +2,18 @@
 
 RUN cd SVT-HEVC/gstreamer-plugin && \
     cmake . && \
-    make -j100 && \
+    make -j20 && \
     make install DESTDIR=/home/build && \
     make install
 
 RUN cd SVT-VP9/gstreamer-plugin && \
     cmake . && \
-    make -j100 && \
+    make -j20 && \
     make install DESTDIR=/home/build && \
     make install
 
 RUN cd SVT-AV1/gstreamer-plugin && \
     cmake . && \
-    make -j100 && \
+    make -j20 && \
     make install DESTDIR=/home/build && \
     make install
