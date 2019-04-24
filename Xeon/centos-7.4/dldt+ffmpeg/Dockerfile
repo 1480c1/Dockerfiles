@@ -59,8 +59,6 @@ ENV CMAKE_REPO=https://cmake.org/files \
 SHELL [ "/bin/bash","-c" ]
 
 # COMMON BUILD TOOLS
-# bzip2 make autoconf libtool git wget -q  ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release numactl-devel libpciaccess-devel patch centos-release-scl devtoolset-7 boost-devel glibc-static glibc-devel libstdc++-static libstdc++-devel libstdc++ libgcc libusbx-devel openblas-devel libass-devel freetype-devel zlib-devel openssl-devel
-
 RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     centos-release-scl devtoolset-7 epel-release flex freetype-devel gcc \
     gcc-c++ git glibc-devel glibc-static libass-devel libgcc libpciaccess-devel \
@@ -70,7 +68,9 @@ RUN yum install -y -q autoconf bison boost-devel bzip2 ca-certificates \
     centos-release-scl devtoolset-7 epel-release flex freetype-devel gcc \
     gcc-c++ git glibc-devel glibc-static libass-devel libgcc libpciaccess-devel \
     libstdc++ libstdc++-devel libstdc++-static libtool libusbx-devel make \
-    numactl-devel openblas-devel openssl-devel patch pkg-config wget -q  zlib-devel;
+    numactl-devel openblas-devel openssl-devel patch pkg-config wget zlib-devel;
+
+
 
 # Install cmake
 RUN wget -q  -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
