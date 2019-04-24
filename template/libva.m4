@@ -14,7 +14,7 @@ RUN yum install -y -q libX11-devel mesa-libGL-devel which libdrm-devel
 RUN wget -O - ${LIBVA_REPO} | tar xz && \
     cd libva-${LIBVA_VER} && \
     ./autogen.sh --prefix=/usr --libdir=/usr/ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) && \
-     && \
+    make -j8 && \
     make install DESTDIR=/home/build && \
     make install;
 
