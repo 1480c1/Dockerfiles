@@ -219,7 +219,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
   mkdir build && \
   cd build && \
   cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
-  make -s -j20 $(nproc) && \
+  make -s -j20 && \
   rm -rf ../bin/intel64/Release/lib/libgtest* && \
   rm -rf ../bin/intel64/Release/lib/libgmock* && \
   rm -rf ../bin/intel64/Release/lib/libmock* && \

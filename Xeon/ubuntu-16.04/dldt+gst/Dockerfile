@@ -208,7 +208,7 @@ RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
         mkdir build && \
         cd build && \
         cmake  -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=OFF -DENABLE_SAMPLE_CORE=OFF  .. && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         rm -rf ../bin/intel64/Release/lib/libgtest* && \
         rm -rf ../bin/intel64/Release/lib/libgmock* && \
         rm -rf ../bin/intel64/Release/lib/libmock* && \
@@ -278,7 +278,7 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-debug \
         --disable-benchmarks \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install;
 
@@ -293,7 +293,7 @@ RUN  wget -O - ${GST_ORC_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -312,7 +312,7 @@ RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -331,7 +331,7 @@ RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -350,7 +350,7 @@ RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -366,7 +366,7 @@ RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -383,7 +383,7 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         --enable-shared \
         --enable-gpl \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -419,7 +419,7 @@ RUN wget ${OPENCV_REPO} && \
         mkdir build && \
         cd build && \
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -D BUILD_EXAMPLES=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_DOCS=OFF -D BUILD_TESTS=OFF .. && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 

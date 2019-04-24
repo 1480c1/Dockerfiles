@@ -211,7 +211,7 @@ RUN  wget -O - ${GST_REPO} | tar xJ && \
         --disable-debug \
         --disable-benchmarks \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install;
 
@@ -230,7 +230,7 @@ RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -249,7 +249,7 @@ RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -268,7 +268,7 @@ RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -284,7 +284,7 @@ RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
         --enable-shared \
         --disable-examples --disable-debug \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
@@ -301,7 +301,7 @@ RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
         --enable-shared \
         --enable-gpl \
         --disable-gtk-doc && \
-        make -s -j20 $(nproc) && \
+        make -s -j20 && \
         make install DESTDIR=/home/build && \
         make install
 
