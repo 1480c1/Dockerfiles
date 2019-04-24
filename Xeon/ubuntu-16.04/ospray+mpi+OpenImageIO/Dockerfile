@@ -11,34 +11,34 @@ ARG CMAKE_REPO=https://cmake.org/files
 RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
     cd cmake-${CMAKE_VER} && \
     ./bootstrap --prefix="/usr" && \
-    make -j8 && \
+    make -j && \
     make install
 
 # Install automake, use version 1.14 on CentOS
 ARG AUTOMAKE_VER=1.14
 ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-    RUN apt-get install -y -q automake
+RUN apt-get install -y -q automake
 
 # Build NASM
 ARG NASM_VER=2.13.03
 ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
 RUN  wget ${NASM_REPO} && \
-     tar -xaf nasm* && \
-     cd nasm-${NASM_VER} && \
-     ./autogen.sh && \
-     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-     make -j8 && \
-     make install
+    tar -xaf nasm* && \
+    cd nasm-${NASM_VER} && \
+    ./autogen.sh && \
+    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+    make -j && \
+    make install
 
 # Build YASM
 ARG YASM_VER=1.3.0
 ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
 RUN  wget -O - ${YASM_REPO} | tar xz && \
-     cd yasm-${YASM_VER} && \
-     sed -i "s/) ytasm.*/)/" Makefile.in && \
-     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-     make -j8 && \
-     make install
+    cd yasm-${YASM_VER} && \
+    sed -i "s/) ytasm.*/)/" Makefile.in && \
+    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
+    make -j && \
+    make install
 
 #build ISPC
 
@@ -49,7 +49,7 @@ ENV ISPC_EXECUTABLE=/home/ispc-v${ISPC_VER}-linux/ispc
 
 #build embree
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libtbb-dev libgl1-mesa-dev 
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libtbb-dev libgl1-mesa-dev
 
 ARG EMBREE_REPO=https://github.com/embree/embree.git
 ARG EMBREE_VER=df0b324
