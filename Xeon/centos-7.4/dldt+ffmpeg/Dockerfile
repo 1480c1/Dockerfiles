@@ -57,7 +57,7 @@ ENV CMAKE_REPO=https://cmake.org/files \
     FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
 
 RUN echo "ip_resolve=4" >> /etc/yum.conf && \
-    yum install -y -q time
+    yum install -y time
 
 SHELL [ "/usr/bin/time","-p","/bin/bash","-c" ]
 
