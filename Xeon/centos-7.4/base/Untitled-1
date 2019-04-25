@@ -1,10 +1,9 @@
-# https://gitlab.freedesktop.org/gstreamer/gstreamer-vaapi/merge_requests/45
 AOM_REPO=https://aomedia.googlesource.com/aom
 AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
-AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-AUTOMAKE_VER=1.16.1
-CMAKE_REPO=https://cmake.org/files
-CMAKE_VER=3.13.1
+AUTOMAKE_REPO=https://git.savannah.gnu.org/git/automake.git
+AUTOMAKE_VER=v1.16.1
+CMAKE_REPO=https://gitlab.kitware.com/cmake/cmake.git
+CMAKE_VER=release
 DLDT_C_API_REPO=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/thirdparty/0001-Add-inference-engine-C-API.patch
 DLDT_REPO=https://github.com/opencv/dldt.git
 DLDT_VER=2018_R5
@@ -24,9 +23,9 @@ FFMPEG_MA_PATCH_REPO_07=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/mast
 FFMPEG_MA_PATCH_REPO_08=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0008-fixed-extra-comma-in-iemetadata.patch
 FFMPEG_MA_PATCH_REPO_09=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0009-add-source-as-option-source-url-calculate-nano-times.patch
 FFMPEG_MA_PATCH_REPO_10=https://raw.githubusercontent.com/VCDP/FFmpeg-patch/master/media-analytics/0010-fixed-buffer-overflow-issue-in-iemetadata.patch
-FFMPEG_REPO=https://github.com/FFmpeg/FFmpeg/archive/${FFMPEG_VER}.tar.gz
+FFMPEG_REPO=https://github.com/FFmpeg/FFmpeg.git
 FFMPEG_THREAD_PATCH_REPO=https://patchwork.ffmpeg.org/patch/11035/raw
-FFMPEG_VER=n4.1
+FFMPEG_VER=release/4.1
 GMMLIB_REPO=https://github.com/intel/gmmlib/archive/${GMMLIB_VER}.tar.gz
 GMMLIB_VER=intel-gmmlib-18.3.0
 GST_ORC_REPO=https://gstreamer.freedesktop.org/src/orc/orc-${GST_ORC_VER}.tar.xz
