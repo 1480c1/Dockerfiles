@@ -122,18 +122,17 @@ RUN wget -q  -O - ${AUTOMAKE_REPO} | tar xJ && \
     wget -q  -O - ${VA_GSTREAMER_PLUGINS_REPO} | tar xz && \
     wget -q  -O - ${VORBIS_REPO} | tar xJ && \
     wget -q  -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-    wget -q  -O - ${YASM_REPO} | tar xz && \
-    wget -q  -O - ${YASM_REPO} | tar xz && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${AOM_VER} ${AOM_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${DLDT_VER} ${DLDT_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${EMBREE_VER} ${EMBREE_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${OpenEXR_VER} ${OpenEXR_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${OpenImageIO_VER} ${OpenImageIO_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${OSPRAY_VER} ${OSPRAY_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${SVT_AV1_VER} ${SVT_AV1_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${SVT_HEVC_VER} ${SVT_HEVC_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${SVT_VP9_VER} ${SVT_VP9_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${VPX_VER} ${VPX_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${X264_VER} ${X264_REPO} && \
-    git clone --recurse-submodules -j8 --depth 1 -b ${PROTOBUF_VER} ${PROTOBUF_REPO}
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${YASM_VER} ${YASM_REPO} \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${AOM_VER} ${AOM_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${DLDT_VER} ${DLDT_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${EMBREE_VER} ${EMBREE_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${OpenEXR_VER} ${OpenEXR_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${OpenImageIO_VER} ${OpenImageIO_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${OSPRAY_VER} ${OSPRAY_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${SVT_AV1_VER} ${SVT_AV1_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${SVT_HEVC_VER} ${SVT_HEVC_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${SVT_VP9_VER} ${SVT_VP9_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${VPX_VER} ${VPX_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${X264_VER} ${X264_REPO} && \
+    git clone -q --recurse-submodules -j8 --depth 1 -b ${PROTOBUF_VER} ${PROTOBUF_REPO}
 RUN wget -q  -O - ${GMMLIB_REPO} | tar xz && mv gmmlib-${GMMLIB_VER} gmmlib;

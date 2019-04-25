@@ -1,0 +1,34 @@
+FROM @BUILD_OS@:@OS_VERSION@ @AS_NEEDED@ @AS_IMAGE@
+
+RUN @PKG_MANAGER@ @INSTALL_PACKAGES@
+WORKDIR /home
+
+ENV configure_libdir=/usr/@BUILD_LIB_DIR@
+
+# Create basic functions. From media-autobuild_suite
+RUN echo "do_vcs() { local vcsType=\"\${1%::*}\" vcsURL=\"\${1#*::}\" vcsBranch=\"\${vcsURL#*#}\" vcsFolder=\"\$2\" ref; [[ \"\$vcsType\" = \"\$vcsURL\" ]] && vcsType=\"git\"; [[ \"\$vcsBranch\" = \"\$vcsURL\" ]] && vcsBranch=\"\"; if [[ \$vcsBranch ]]; then vcsURL=\"\${vcsURL%#*}\"; case \${vcsBranch%%=*} in commit|tag|revision) ref=\${vcsBranch##*=}; ;; branch) ref=\${vcsBranch##*=}; [[ \$vcsType = git && \$ref = \${ref%/*} ]] && ref=origin/\$ref; ;; esac; else if [[ \$vcsType = git ]]; then ref=\"origin/HEAD\"; elif [[ \$vcsType = hg ]]; then ref=\"tip\"; elif [[ \$vcsType = svn ]]; then ref=\"HEAD\"; fi; fi; [[ ! \"\$vcsFolder\" ]] && vcsFolder=\"\${vcsURL##*/}\" && vcsFolder=\"\${vcsFolder%.*}\"; set -x; if [[ \"\$vcsType\" = \"svn\" ]]; then svn checkout -r \"\$ref\" \"\$vcsURL\" \"\$vcsFolder\"; elif [[ \"\$vcsType\" = \"git\" ]]; then git clone -q --recurse-submodules -j8 --depth 1 -b \$ref \"\$vcsURL\" \"\$vcsFolder\"; else hg clone -r \$ref \"\$vcsURL\" \"\$vcsFolder\"; fi; set +x; return 0; }" >> /etc/profile
+
+# Get package repos
+RUN @REPOS@
+
+# Install cmake
+RUN cd cmake-${CMAKE_VER} && \
+    ./bootstrap --prefix=/usr && \
+    make -s -j10 && make -s install
+
+# Build AUTOMAKE
+RUN cd automake-${AUTOMAKE_VER} && \
+    ./configure --prefix=/usr --libdir=${configure_libdir} && \
+    make -s -j10 && make -s install
+
+# Build NASM
+RUN cd nasm-${NASM_VER} && \
+    ./autogen.sh && \
+    ./configure --prefix=/usr --libdir=${configure_libdir} && \
+    make -s -j10 && make -s install
+
+# Build YASM
+RUN cd yasm-${YASM_VER} && \
+    sed -i "s/) ytasm.*/)/" Makefile.in && \
+    ./configure --prefix="/usr" --libdir=${configure_libdir} && \
+    make -s -j10 && make -s install

@@ -3,7 +3,7 @@ FROM ubuntu:18.04 AS build
 WORKDIR /home
 
 # COMMON BUILD TOOLS
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget -q  pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex
 
 # Install cmake
 ARG CMAKE_VER=3.13.1
@@ -157,7 +157,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install 
+    make -s install
 
 
 # Fetch SVT-AV1
@@ -188,7 +188,7 @@ RUN git clone ${SVT_VP9_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -s -j10 && \
     make -s install DESTDIR=/home/build && \
-    make -s install 
+    make -s install
 
 #include(transform360.m4)
 # Build DLDT-Inference Engine
@@ -344,4 +344,3 @@ COPY --from=build /home/build /
 ARG libdir=/opt/intel/dldt/inference-engine/lib/ubuntu_18.04/intel64
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/dldt/inference-engine/lib:/opt/intel/dldt/inference-engine/external/omp/lib:${libdir}
 ENV InferenceEngine_DIR=/opt/intel/dldt/inference-engine/share
-
