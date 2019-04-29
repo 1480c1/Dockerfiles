@@ -1,9 +1,7 @@
-
-FROM ubuntu:18.04 AS build
+FROM 1480c1/dockerfiles:ubuntu1804base AS build
 WORKDIR /home
 define(`BUILD_LINKAGE',shared)dnl
 
-include(build-tools.m4)
 include(ispc.m4)
 include(embree.m4)
 include(OpenImageIO.m4)

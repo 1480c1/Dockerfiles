@@ -2,9 +2,8 @@
 ARG SVT_AV1_VER=90b56a80795d4d0448673c4c7276ce6d5c8ac9d4
 ARG SVT_AV1_REPO=https://github.com/OpenVisualCloud/SVT-AV1
 
-RUN git clone ${SVT_AV1_REPO} && \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${SVT_AV1_VER} ${SVT_AV1_REPO} && \
     cd SVT-AV1/Build/linux && \
-    git checkout ${SVT_AV1_VER} && \
     mkdir -p ../../Bin/Release && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=ifelse(index(DOCKER_IMAGE,ubuntu),-1,lib64,lib/x86_64-linux-gnu) -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -j8 && \

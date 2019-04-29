@@ -1,4 +1,4 @@
-set(image "xeone3_dldt_gst_centos75")
+set(image "xeone3-centos75-dldt-gst")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/gst-tests.cmake")
 include("${CMAKE_SOURCE_DIR}/script/dldt-gst-tests.cmake")

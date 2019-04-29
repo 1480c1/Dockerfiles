@@ -2,7 +2,7 @@
 ARG QATZIP_VER=v0.2.7
 ARG QATZIP_REPO=https://github.com/intel/QATzip/archive/${QATZIP_VER}.tar.gz
 
-RUN wget -O - ${QATZIP_REPO} | tar xz && mv QATzip-${QATZIP_VER} QATzip && \
+RUN wget -qO - ${QATZIP_REPO} | tar xz && mv QATzip-${QATZIP_VER} QATzip && \
     cd QATzip && \
     ./configure --with-ICP_ROOT=/home/qat-driver --prefix=/opt/qat && \
     make -j8 && \

@@ -1,3 +1,3 @@
-set(image "xeone3_ffmpeg_centos76")
+set(image "xeone3-centos76-ffmpeg")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/ffmpeg-tests.cmake")

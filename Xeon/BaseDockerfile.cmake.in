@@ -1,0 +1,49 @@
+FROM @build_os@:@build_os_ver@ AS build
+WORKDIR /home
+
+# COMMON BUILD TOOLS
+RUN @build_tools@
+
+ARG CMAKE_VER=@build_cmake_ver@
+ARG AUTOMAKE_VER=@build_automake_ver@
+ARG NASM_VER=@build_nasm_ver@
+ARG YASM_VER=@build_yasm_ver@
+ARG CMAKE_REPO=https://cmake.org/files
+ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
+ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
+ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
+
+# Install cmake
+# Install automake, use version 1.14 on CentOS
+# Build NASM
+# Build YASM
+RUN wget -qO - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
+    cd cmake-${CMAKE_VER} && \
+    ./bootstrap --prefix="/usr" && \
+    make -j8 && \
+    make install && \
+    cd /home && \
+    rm -rf cmake-${CMAKE_VER} && \
+    wget -qO - ${AUTOMAKE_REPO} | tar xJ && \
+    cd automake-${AUTOMAKE_VER} && \
+    ./configure --prefix=/usr --libdir=/usr/@build_libdir@ --disable-doc && \
+    make -j8 && \
+    make install && \
+    cd /home && \
+    rm -rf automake-${AUTOMAKE_VER} && \
+    wget -qO - ${NASM_REPO} | tar xj && \
+    cd nasm-${NASM_VER} && \
+    ./autogen.sh && \
+    ./configure --prefix="/usr" --libdir=/usr/@build_libdir@ && \
+    make -j8 && \
+    make install && \
+    cd /home && \
+    rm -rf nasm-${NASM_VER} && \
+    wget -qO - ${YASM_REPO} | tar xz && \
+    cd yasm-${YASM_VER} && \
+    sed -i "s/) ytasm.*/)/" Makefile.in && \
+    ./configure --prefix="/usr" --libdir=/usr/@build_libdir@ && \
+    make -j8 && \
+    make install && \
+    cd /home && \
+    rm -rf yasm-${YASM_VER}

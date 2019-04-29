@@ -1,10 +1,8 @@
-
-FROM centos:7.5.1804 AS build
+FROM 1480c1/dockerfiles:centos75base AS build
 WORKDIR /home
 define(`BUILD_LINKAGE',shared)dnl
 define(`BUILD_TOOLS_NO_ASM')dnl
 
-include(build-tools.m4)
 include(nginx-rtmp.m4)
 include(nginx.m4)dnl
 

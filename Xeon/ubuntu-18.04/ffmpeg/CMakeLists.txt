@@ -1,3 +1,3 @@
-set(image "xeon_ffmpeg_ubuntu1804")
+set(image "xeon-ubuntu1804-ffmpeg")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/ffmpeg-tests.cmake")

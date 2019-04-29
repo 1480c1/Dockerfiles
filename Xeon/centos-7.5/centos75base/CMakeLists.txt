@@ -1,0 +1,6 @@
+set(image "xeon_base_centos75")
+set(build_os "centos")
+set(build_os_ver "7.5.1804")
+set(build_tools "yum install -y -q bzip2 make autoconf libtool git wget ca-certificates pkg-config gcc gcc-c++ bison flex patch epel-release yum-devel libcurl-devel zlib-devel")
+set(build_libdir "lib64")
+configure_file(../../BaseDockerfile.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Dockerfile @ONLY)

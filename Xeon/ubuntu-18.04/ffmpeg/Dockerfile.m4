@@ -1,9 +1,7 @@
-
-FROM ubuntu:18.04 AS build
+FROM 1480c1/dockerfiles:ubuntu1804base AS build
 WORKDIR /home
 define(`BUILD_LINKAGE',shared)dnl
 
-include(build-tools.m4)
 include(libogg.m4)
 include(libvorbis.m4)
 include(libmp3lame.m4)

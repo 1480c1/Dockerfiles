@@ -1,9 +1,7 @@
-
-FROM centos:7.4.1708 AS build
+FROM 1480c1/dockerfiles:centos74base AS build
 WORKDIR /home
 define(`BUILD_LINKAGE',shared)dnl
 
-include(build-tools.m4)
 include(ispc.m4)
 include(embree.m4)
 include(OpenImageIO.m4)

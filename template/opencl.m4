@@ -3,10 +3,12 @@
 ifelse(index(DOCKER_IMAGE,ubuntu),-1,,
 RUN mkdir neo
 
-RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/19.01.12103/intel-gmmlib_18.4.0.348_amd64.deb
-RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/19.01.12103/intel-igc-core_18.50.1270_amd64.deb
-RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/19.01.12103/intel-igc-opencl_18.50.1270_amd64.deb
-RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/19.01.12103/intel-opencl_19.01.12103_amd64.deb
+ARG INTEL_COMPUTE_RUNTIME_VER=19.01.12103
+
+RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/${INTEL_COMPUTE_RUNTIME_VER}/intel-gmmlib_18.4.0.348_amd64.deb
+RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/${INTEL_COMPUTE_RUNTIME_VER}/intel-igc-core_18.50.1270_amd64.deb
+RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/${INTEL_COMPUTE_RUNTIME_VER}/intel-igc-opencl_18.50.1270_amd64.deb
+RUN cd neo && wget https://github.com/intel/compute-runtime/releases/download/${INTEL_COMPUTE_RUNTIME_VER}/intel-opencl_19.01.12103_amd64.deb
 
 RUN cd neo && \
     dpkg -i *.deb && \

@@ -7,12 +7,9 @@ ifelse(index(DOCKER_IMAGE,centos),-1,,dnl
 RUN yum install -y -q boost-devel glibc-static glibc-devel libstdc++-static libstdc++-devel libstdc++ libgcc libusbx-devel openblas-devel;
 )dnl
 
-RUN git clone -b ${DLDT_VER} ${DLDT_REPO} && \
-    cd dldt && \
-    git submodule init && \
-    git submodule update --recursive && \
-    cd inference-engine && \
-    wget -O - ${DLDT_C_API_REPO} | patch -p2 && \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${DLDT_VER} ${DLDT_REPO} && \
+    cd dldt/inference-engine && \
+    wget -qO - ${DLDT_C_API_REPO} | patch -p2 && \
     mkdir build && \
     cd build && \
     cmake ifelse(index(BUILD_LINKAGE,static),-1,,-DBUILD_SHARED_LIBS=OFF) -DCMAKE_INSTALL_PREFIX=/opt/intel/dldt -DLIB_INSTALL_PATH=/opt/intel/dldt -DENABLE_MKL_DNN=ON -DENABLE_CLDNN=ifelse(index(DOCKER_IMAGE,xeon-),-1,ON,OFF) -DENABLE_SAMPLE_CORE=OFF  .. && \
@@ -81,9 +78,8 @@ ARG PYTHON_TRUSTED_HOST
 ARG PYTHON_TRUSTED_INDEX_URL
 #install MO dependencies
 #RUN pip3 install numpy scipy
-RUN git clone https://github.com/google/protobuf.git && \
+RUN git clone --recurse-submodules -j8 --depth 1 https://github.com/google/protobuf.git && \
     cd protobuf && \
-    git submodule update --init --recursive && \
     ./autogen.sh && \
     ./configure && \
     make && \

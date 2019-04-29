@@ -1,3 +1,3 @@
-set(image "xeon_gst_ubuntu1604")
+set(image "xeon-ubuntu1604-gst")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/gst-tests.cmake")

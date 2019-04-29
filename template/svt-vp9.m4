@@ -2,9 +2,8 @@
 ARG SVT_VP9_VER=d18b4acf9139be2e83150e318ffd3dba1c432e74
 ARG SVT_VP9_REPO=https://github.com/OpenVisualCloud/SVT-VP9
 
-RUN git clone ${SVT_VP9_REPO} && \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${SVT_VP9_VER} ${SVT_VP9_REPO} && \
     cd SVT-VP9/Build/linux && \
-    git checkout ${SVT_VP9_VER} && \
     mkdir -p ../../Bin/Release && \
 ifelse(index(DOCKER_IMAGE,centos),-1,,`dnl
   ( source /opt/rh/devtoolset-7/enable && \

@@ -1,0 +1,1 @@
+set(cpuType "vca2")

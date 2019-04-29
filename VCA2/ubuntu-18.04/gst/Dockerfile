@@ -1,50 +1,11 @@
-
-FROM ubuntu:18.04 AS build
+FROM 1480c1/dockerfiles:ubuntu1804base AS build
 WORKDIR /home
-
-# COMMON BUILD TOOLS
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends build-essential autoconf make git wget pciutils cpio libtool lsb-release ca-certificates pkg-config bison flex libcurl4-gnutls-dev zlib1g-dev
-
-# Install cmake
-ARG CMAKE_VER=3.13.1
-ARG CMAKE_REPO=https://cmake.org/files
-RUN wget -O - ${CMAKE_REPO}/v${CMAKE_VER%.*}/cmake-${CMAKE_VER}.tar.gz | tar xz && \
-    cd cmake-${CMAKE_VER} && \
-    ./bootstrap --prefix="/usr" --system-curl && \
-    make -j8 && \
-    make install
-
-# Install automake, use version 1.14 on CentOS
-ARG AUTOMAKE_VER=1.14
-ARG AUTOMAKE_REPO=https://ftp.gnu.org/pub/gnu/automake/automake-${AUTOMAKE_VER}.tar.xz
-    RUN apt-get install -y -q automake
-
-# Build NASM
-ARG NASM_VER=2.13.03
-ARG NASM_REPO=https://www.nasm.us/pub/nasm/releasebuilds/${NASM_VER}/nasm-${NASM_VER}.tar.bz2
-RUN  wget ${NASM_REPO} && \
-     tar -xaf nasm* && \
-     cd nasm-${NASM_VER} && \
-     ./autogen.sh && \
-     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-     make -j8 && \
-     make install
-
-# Build YASM
-ARG YASM_VER=1.3.0
-ARG YASM_REPO=https://www.tortall.net/projects/yasm/releases/yasm-${YASM_VER}.tar.gz
-RUN  wget -O - ${YASM_REPO} | tar xz && \
-     cd yasm-${YASM_VER} && \
-     sed -i "s/) ytasm.*/)/" Makefile.in && \
-     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu && \
-     make -j8 && \
-     make install
 
 # Build ogg
 ARG OGG_VER=1.3.3
 ARG OGG_REPO=https://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz
 
-RUN wget -O - ${OGG_REPO} | tar xJ && \
+RUN wget -qO - ${OGG_REPO} | tar xJ && \
     cd libogg-${OGG_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
     make -j8 && \
@@ -55,7 +16,7 @@ RUN wget -O - ${OGG_REPO} | tar xJ && \
 ARG VORBIS_VER=1.3.6
 ARG VORBIS_REPO=https://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz
 
-RUN wget -O - ${VORBIS_REPO} | tar xJ && \
+RUN wget -qO - ${VORBIS_REPO} | tar xJ && \
     cd libvorbis-${VORBIS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
     make -j8 && \
@@ -66,7 +27,7 @@ RUN wget -O - ${VORBIS_REPO} | tar xJ && \
 ARG MP3LAME_VER=3.100
 ARG MP3LAME_REPO=https://sourceforge.net/projects/lame/files/lame/${MP3LAME_VER}/lame-${MP3LAME_VER}.tar.gz
 
-RUN wget -O - ${MP3LAME_REPO} | tar xz && \
+RUN wget -qO - ${MP3LAME_REPO} | tar xz && \
     cd lame-${MP3LAME_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared --enable-nasm && \
     make -j8 && \
@@ -77,7 +38,7 @@ RUN wget -O - ${MP3LAME_REPO} | tar xz && \
 ARG FDK_AAC_VER=v0.1.6
 ARG FDK_AAC_REPO=https://github.com/mstorsjo/fdk-aac/archive/${FDK_AAC_VER}.tar.gz
 
-RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
+RUN wget -qO - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac && \
     cd fdk-aac && \
     autoreconf -fiv && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
@@ -90,7 +51,7 @@ RUN wget -O - ${FDK_AAC_REPO} | tar xz && mv fdk-aac-${FDK_AAC_VER#v} fdk-aac &&
 ARG OPUS_VER=1.2.1
 ARG OPUS_REPO=https://archive.mozilla.org/pub/opus/opus-${OPUS_VER}.tar.gz
 
-RUN wget -O - ${OPUS_REPO} | tar xz && \
+RUN wget -qO - ${OPUS_REPO} | tar xz && \
     cd opus-${OPUS_VER} && \
     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
     make -j8 && \
@@ -114,26 +75,26 @@ RUN git clone ${VPX_REPO} && \
 ARG AOM_VER=b6f1767eedbaddeb1ff5aa409a710ef61078640e
 ARG AOM_REPO=https://aomedia.googlesource.com/aom
 
-RUN  git clone ${AOM_REPO} && \
-     mkdir aom/aom_build && \
-     cd aom/aom_build && \
-     git checkout ${AOM_VER} && \
-     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
-     make -j8 && \
-     make install DESTDIR="/home/build" && \
-     make install
+RUN git clone ${AOM_REPO} && \
+    mkdir aom/aom_build && \
+    cd aom/aom_build && \
+    git checkout ${AOM_VER} && \
+    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_NASM=ON -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DCMAKE_INSTALL_PREFIX="/usr" -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu .. && \
+    make -j8 && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 # Build x264
 ARG X264_VER=stable
 ARG X264_REPO=https://github.com/mirror/x264
 
-RUN  git clone ${X264_REPO} && \
-     cd x264 && \
-     git checkout ${X264_VER} && \
-     ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
-     make -j8 && \
-     make install DESTDIR="/home/build" && \
-     make install
+RUN git clone ${X264_REPO} && \
+    cd x264 && \
+    git checkout ${X264_VER} && \
+    ./configure --prefix="/usr" --libdir=/usr/lib/x86_64-linux-gnu --enable-shared && \
+    make -j8 && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 
 # Build x265
@@ -142,12 +103,12 @@ ARG X265_REPO=https://github.com/videolan/x265/archive/${X265_VER}.tar.gz
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libnuma-dev
 
-RUN  wget -O - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
-     cd x265/build/linux && \
-     cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
-     make -j8 && \
-     make install DESTDIR="/home/build" && \
-     make install
+RUN  wget -qO - ${X265_REPO} | tar xz && mv x265-${X265_VER} x265 && \
+    cd x265/build/linux && \
+    cmake -DBUILD_SHARED_LIBS=ON -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR=/usr/lib/x86_64-linux-gnu ../../source && \
+    make -j8 && \
+    make install DESTDIR="/home/build" && \
+    make install
 
 # Fetch SVT-HEVC
 ARG SVT_HEVC_VER=20a47b0d904e9d99e089d93d7c33af92788cbfdb
@@ -160,7 +121,7 @@ RUN git clone ${SVT_HEVC_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -j8 && \
     make install DESTDIR=/home/build && \
-    make install 
+    make install
 
 
 # Fetch SVT-AV1
@@ -191,13 +152,13 @@ RUN git clone ${SVT_VP9_REPO} && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib/x86_64-linux-gnu -DCMAKE_ASM_NASM_COMPILER=yasm ../.. && \
     make -j8 && \
     make install DESTDIR=/home/build && \
-    make install 
+    make install
 
 # Fetch gmmlib
 ARG GMMLIB_VER=intel-gmmlib-18.3.0
 ARG GMMLIB_REPO=https://github.com/intel/gmmlib/archive/${GMMLIB_VER}.tar.gz
 
-RUN wget -O - ${GMMLIB_REPO} | tar xz && mv gmmlib-${GMMLIB_VER} gmmlib;
+RUN wget -qO - ${GMMLIB_REPO} | tar xz && mv gmmlib-${GMMLIB_VER} gmmlib;
 
 
 # Build libva
@@ -208,7 +169,7 @@ RUN apt-get remove libva*
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libdrm-dev libx11-dev xorg-dev libgl1-mesa-dev openbox
 
-RUN wget -O - ${LIBVA_REPO} | tar xz && \
+RUN wget -qO - ${LIBVA_REPO} | tar xz && \
     cd libva-${LIBVA_VER} && \
     ./autogen.sh --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu && \
     make -j8 && \
@@ -222,7 +183,7 @@ ARG MEDIA_DRIVER_REPO=https://github.com/VCDP/media-driver/archive/${MEDIA_DRIVE
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libdrm-dev libpciaccess-dev libx11-dev xorg-dev libgl1-mesa-dev
 
-RUN wget -O - ${MEDIA_DRIVER_REPO} | tar xz && mv media-driver-${MEDIA_DRIVER_VER} media-driver && \
+RUN wget -qO - ${MEDIA_DRIVER_REPO} | tar xz && mv media-driver-${MEDIA_DRIVER_VER} media-driver && \
     mkdir -p media-driver/build && \
     cd media-driver/build && \
     cmake -DBUILD_TYPE=release -DBUILD_ALONG_WITH_CMRTLIB=1 -DMEDIA_VERSION="2.0.0" -DBS_DIR_GMMLIB=/home/gmmlib/Source/GmmLib -DBS_DIR_COMMON=/home/gmmlib/Source/Common -DBS_DIR_INC=/home/gmmlib/Source/inc -DBS_DIR_MEDIA=/home/media-driver -Wno-dev -DCMAKE_INSTALL_PREFIX=/usr .. && \
@@ -237,41 +198,41 @@ ARG GST_VER=1.14.4
 ARG GST_REPO=https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${GST_VER}.tar.xz
 
 RUN  ln -sf /usr/share/zoneinfo/UTC /etc/localtime; \
-     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libglib2.0-dev gobject-introspection libgirepository1.0-dev libpango-1.0-0 libpangocairo-1.0-0 autopoint
-RUN  wget -O - ${GST_REPO} | tar xJ && \
-     cd gstreamer-${GST_VER} && \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --enable-introspection \
-        --disable-examples \
-        --disable-debug \
-        --disable-benchmarks \
-        --disable-gtk-doc && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install;
+    DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libglib2.0-dev gobject-introspection libgirepository1.0-dev libpango-1.0-0 libpangocairo-1.0-0 autopoint
+RUN  wget -qO - ${GST_REPO} | tar xJ && \
+    cd gstreamer-${GST_VER} && \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --enable-introspection \
+    --disable-examples \
+    --disable-debug \
+    --disable-benchmarks \
+    --disable-gtk-doc && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install;
 
 # Build the gstremaer plugin base
 ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${GST_VER}.tar.xz
 
 RUN  DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends libxv-dev libvisual-0.4-dev libtheora-dev libglib2.0-dev libasound2-dev libcdparanoia-dev libgl1-mesa-dev libpango1.0-dev
 
-RUN  wget -O - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
-     cd gst-plugins-base-${GST_VER} && \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-introspection \
-        --enable-shared \
-        --disable-examples --disable-debug \
-        --disable-gtk-doc && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install
+RUN  wget -qO - ${GST_PLUGIN_BASE_REPO} | tar xJ && \
+    cd gst-plugins-base-${GST_VER} && \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-introspection \
+    --enable-shared \
+    --disable-examples --disable-debug \
+    --disable-gtk-doc && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install
 
 
 # Build the gstremaer plugin good set
@@ -279,18 +240,18 @@ ARG GST_PLUGIN_GOOD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-good/
 
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libsoup2.4-dev libjpeg-dev
 
-RUN  wget -O - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
-     cd gst-plugins-good-${GST_VER} && \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --disable-examples --disable-debug \
-        --disable-gtk-doc && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install
+RUN  wget -qO - ${GST_PLUGIN_GOOD_REPO} | tar xJ && \
+    cd gst-plugins-good-${GST_VER} && \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --disable-examples --disable-debug \
+    --disable-gtk-doc && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install
 
 
 # Build the gstremaer plugin bad set
@@ -298,48 +259,48 @@ ARG GST_PLUGIN_BAD_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-bad/gs
 
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libssl-dev
 
-RUN  wget -O - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
-     cd gst-plugins-bad-${GST_VER} && \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --disable-examples --disable-debug \
-        --disable-gtk-doc && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install
+RUN  wget -qO - ${GST_PLUGIN_BAD_REPO} | tar xJ && \
+    cd gst-plugins-bad-${GST_VER} && \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --disable-examples --disable-debug \
+    --disable-gtk-doc && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install
 
 # Build the gstremaer plugin ugly set
 ARG GST_PLUGIN_UGLY_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${GST_VER}.tar.xz
 
-RUN  wget -O - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
-     cd gst-plugins-ugly-${GST_VER}; \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --disable-examples --disable-debug \
-        --disable-gtk-doc && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install
+RUN  wget -qO - ${GST_PLUGIN_UGLY_REPO} | tar xJ; \
+    cd gst-plugins-ugly-${GST_VER}; \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --disable-examples --disable-debug \
+    --disable-gtk-doc && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install
 
 # Build gst-libav
 ARG GST_PLUGIN_LIBAV_REPO=https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${GST_VER}.tar.xz
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y -q --no-install-recommends zlib1g-dev libssl-dev
 
-RUN wget -O - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
+RUN wget -qO - ${GST_PLUGIN_LIBAV_REPO} | tar xJ && \
     cd gst-libav-${GST_VER} && \
     ./autogen.sh \
-        --prefix="/usr" \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --enable-gpl \
-        --disable-gtk-doc && \
+    --prefix="/usr" \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --enable-gpl \
+    --disable-gtk-doc && \
     make -j $(nproc) && \
     make install DESTDIR=/home/build && \
     make install
@@ -374,20 +335,20 @@ ARG GST_PLUGIN_VAAPI_REPO_GIT=https://gitlab.freedesktop.org/gstreamer/gstreamer
 
 RUN  apt-get update && apt-get install -y -q --no-install-recommends libxrandr-dev libegl1-mesa-dev autopoint bison flex libudev-dev
 
-#RUN  git clone https://gitlab.freedesktop.org/gstreamer/gstreamer-vaapi.git -b 1.14 --depth 10 && \
+#RUN git clone https://gitlab.freedesktop.org/gstreamer/gstreamer-vaapi.git -b 1.14 --depth 10 && \
 #     cd gstreamer-vaapi && git reset --hard ${GST_PLUGIN_VAAPI_REPO_DISPLAY_LOCK_PATCH_HASH} && \
-RUN  wget -O - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
-     cd gstreamer-vaapi-${GST_VER} && \
-     ./autogen.sh \
-        --prefix=/usr \
-        --libdir=/usr/lib/x86_64-linux-gnu \
-        --libexecdir=/usr/lib/x86_64-linux-gnu \
-        --enable-shared \
-        --disable-examples \
-        --disable-gtk-doc --disable-debug && \
-     make -j $(nproc) && \
-     make install DESTDIR=/home/build && \
-     make install
+RUN  wget -qO - ${GST_PLUGIN_VAAPI_REPO} | tar xJ && \
+    cd gstreamer-vaapi-${GST_VER} && \
+    ./autogen.sh \
+    --prefix=/usr \
+    --libdir=/usr/lib/x86_64-linux-gnu \
+    --libexecdir=/usr/lib/x86_64-linux-gnu \
+    --enable-shared \
+    --disable-examples \
+    --disable-gtk-doc --disable-debug && \
+    make -j $(nproc) && \
+    make install DESTDIR=/home/build && \
+    make install
 
 
 # Clean up after build
@@ -413,4 +374,3 @@ ENV LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
 ENV LIBVA_DRIVER_NAME=iHD
 ENV GST_VAAPI_ALL_DRIVERS=1
 ENV DISPLAY=:0.0
-

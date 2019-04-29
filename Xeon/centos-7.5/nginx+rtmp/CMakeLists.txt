@@ -1,4 +1,4 @@
-set(image "xeon_nginx_rtmp_centos75")
-set(dep_image "xeon_ffmpeg_centos75")
+set(image "xeon-centos75-nginx-rtmp")
+set(dep_image "xeon-centos75-ffmpeg")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/nginx-tests.cmake")

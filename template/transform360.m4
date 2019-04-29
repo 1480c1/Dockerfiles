@@ -12,9 +12,8 @@ RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime; \
 ifelse(index(DOCKER_IMAGE,centos),-1,,
 RUN yum install -y -q opencv-devel
 )dnl
-RUN git clone ${TRANSFORM360_REPO} && \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${TRANSFORM360_VER} ${TRANSFORM360_REPO} && \
     cd transform360/Transform360 && \
-    git checkout ${TRANSFORM360_VER} && \
     sed -i "s/STATIC//" CMakeLists.txt && \
     sed -i "s/DESTINATION lib/DESTINATION \${LIB_INSTALL_DIR}/g" CMakeLists.txt;
 define(`FFMPEG_SOURCE_TRANSFORM360',dnl

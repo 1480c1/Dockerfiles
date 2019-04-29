@@ -1,4 +1,4 @@
-set(image "xeon_dldt_gst_ubuntu1804")
+set(image "xeon-ubuntu1804-dldt-gst")
 include("${CMAKE_SOURCE_DIR}/script/image.cmake")
 include("${CMAKE_SOURCE_DIR}/script/gst-tests.cmake")
 include("${CMAKE_SOURCE_DIR}/script/dldt-gst-tests.cmake")

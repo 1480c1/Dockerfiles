@@ -1,9 +1,7 @@
-
-FROM centos:7.5.1804 AS build
+FROM 1480c1/dockerfiles:centos75base AS build
 WORKDIR /home
 define(`BUILD_LINKAGE',shared)dnl
 
-include(build-tools.m4)
 include(libogg.m4)
 include(libvorbis.m4)
 include(libmp3lame.m4)

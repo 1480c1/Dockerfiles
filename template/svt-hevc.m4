@@ -7,9 +7,8 @@ RUN yum install -y -q patch centos-release-scl && \
     yum install -y -q devtoolset-7
 
 )dnl
-RUN git clone ${SVT_HEVC_REPO} && \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${SVT_HEVC_VER} ${SVT_HEVC_REPO} && \
     cd SVT-HEVC/Build/linux && \
-    git checkout ${SVT_HEVC_VER} && \
     mkdir -p ../../Bin/Release && \
 ifelse(index(DOCKER_IMAGE,centos),-1,,`dnl
     ( source /opt/rh/devtoolset-7/enable && \

@@ -13,7 +13,7 @@ ARG EXAMPLE_NAME=sanm.zip
 ARG LIGHT_PATH=http://www.pauldebevec.com/Probes/rnl_probe.pfm
 RUN mkdir example; \
     cd example; \
-    wget ${LIGHT_PATH}; \
-    wget ${EXAMPLE_PATH}; \
+    wget -q ${LIGHT_PATH}; \
+    wget -q ${EXAMPLE_PATH}; \
     unzip ${EXAMPLE_NAME}; \
     rm -f ${EXAMPLE_NAME}

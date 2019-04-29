@@ -14,10 +14,9 @@ ENV PATH=$PATH:/usr/lib64/mpich/bin
 
 ARG OSPRAY_VER=c42a885
 ARG OSPRAY_REPO=https://github.com/ospray/ospray.git
-RUN git clone ${OSPRAY_REPO}; \
+RUN git clone --recurse-submodules -j8 --depth 1 -b ${OSPRAY_VER} ${OSPRAY_REPO}; \
     mkdir ospray/build; \
     cd ospray/build; \
-    git checkout ${OSPRAY_VER}; \
     cmake .. -DOSPRAY_MODULE_MPI=ON -DOSPRAY_SG_OPENIMAGEIO=ON; \
     make -j 8
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ospray/build

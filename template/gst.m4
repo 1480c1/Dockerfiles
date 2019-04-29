@@ -12,7 +12,7 @@ RUN  ln -sf /usr/share/zoneinfo/UTC /etc/localtime; \
 ifelse(index(DOCKER_IMAGE,centos),-1,,
 RUN  yum install -y -q glib2-devel-2.56.1 gettext-devel gobject-introspection gobject-introspection-devel python-gobject-base
 )dnl
-RUN  wget -O - ${GST_REPO} | tar xJ && \
+RUN  wget -qO - ${GST_REPO} | tar xJ && \
      cd gstreamer-${GST_VER} && \
      ./autogen.sh \
         --prefix=/usr \
