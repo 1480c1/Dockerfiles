@@ -24,8 +24,7 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Dockerfile)
         set(dockerHubRepo "dockerfiles")
     endif()
     add_custom_command(TARGET build_${image}
-        COMMAND sudo docker build --network=host -t "${dockerUsername}/${dockerHubRepo}:${image}" .
-        SOURCES ${strippedm4Files})
+        COMMAND sudo docker build --network=host -t "${dockerUsername}/${dockerHubRepo}:${image}" .)
 endif()
 if(dep_image)
     add_dependencies(build_${image} build_${dep_image})
